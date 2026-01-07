@@ -1,0 +1,133 @@
+import {
+	defineNuxtModule,
+	addPlugin,
+	createResolver,
+	addImportsDir,
+	addComponentsDir,
+	addServerHandler,
+	addServerTemplate,
+} from "@nuxt/kit";
+
+import type { FirebaseNuxtModuleOptions } from "./types";
+import { locale } from "./runtime/client/utils/locale";
+import { publicRuntimeConfig } from "./runtime/server/utils/environment";
+
+/**
+ * Nuxt module for @open-xamu-co/firebase-nuxt
+ */
+export default defineNuxtModule<FirebaseNuxtModuleOptions>({
+	meta: {
+		name: "@open-xamu-co/firebase-nuxt",
+		configKey: "firebaseNuxt",
+		compatibility: { nuxt: "^3.0.0" },
+	},
+	defaults: {
+		// Set module defaults
+		tenants: false,
+		readCollection: () => false,
+		sudo: () => false,
+	},
+	async setup(moduleOptions, nuxt) {
+		const { resolve } = createResolver(import.meta.url);
+		const runtimePath = resolve("./runtime");
+
+		// Update nuxt options
+		nuxt.options.experimental.asyncContext = true;
+		nuxt.options.runtimeConfig.public = {
+			...nuxt.options.runtimeConfig.public,
+			...publicRuntimeConfig,
+			tenants: moduleOptions.tenants, // Globally available
+		};
+
+		// Register plugins (Manually)
+		addPlugin(resolve(runtimePath, "plugins/loaded.client"));
+		addPlugin(resolve(runtimePath, "plugins/scrollBehavior.client"));
+		addPlugin(resolve(runtimePath, "plugins/firebase-setup"));
+
+		// Register composables (Auto import)
+		addImportsDir(resolve(runtimePath, "composables"));
+
+		// Register components (Auto import)
+		addComponentsDir({
+			path: resolve(runtimePath, "components"),
+		});
+
+		// Register server virtual templates
+		// Since functions are not serializable, we need to use a virtual template
+		addServerTemplate({
+			filename: "#internal/firebase-nuxt",
+			getContents: () => `
+				export const readCollection = ${moduleOptions.readCollection.toString()};
+				export const sudo = ${moduleOptions.sudo.toString()};
+			`,
+		});
+
+		// Register server middlewares
+		addServerHandler({
+			middleware: true,
+			handler: resolve(runtimePath, "server/middleware/0.hotlinking"),
+		});
+		addServerHandler({
+			middleware: true,
+			handler: resolve(runtimePath, "server/middleware/1.context"),
+		});
+
+		// Register server handlers
+		addServerHandler({
+			method: "get",
+			route: "/api/all/:collectionId",
+			handler: resolve(runtimePath, "server/api/all-collection.get"),
+		});
+		addServerHandler({
+			method: "get",
+			route: "/api/all/:collectionId/:documentId",
+			handler: resolve(runtimePath, "server/api/all-collection-document.get"),
+		});
+	},
+	moduleDependencies() {
+		const { resolve } = createResolver(import.meta.url);
+		const runtimePath = resolve("./runtime");
+
+		return {
+			"nuxt-csurf": {
+				version: ">=1.6.5",
+			},
+			"@open-xamu-co/ui-nuxt": {
+				version: ">=4.0.0-next.4",
+				defaults: {
+					locale,
+					lang: "es",
+					country: "CO",
+					swal: {
+						overrides: {
+							customClass: {
+								confirmButton: ["bttn"],
+								cancelButton: ["bttnToggle"],
+								denyButton: ["link"],
+							},
+						},
+						preventOverrides: {
+							customClass: {
+								confirmButton: ["bttn", "--tm-danger-light"],
+								cancelButton: ["bttnToggle"],
+								denyButton: ["link"],
+							},
+						},
+					},
+					image: {
+						provider: "firebase",
+						domains: ["firebasestorage.googleapis.com"],
+						providers: {
+							firebase: { provider: resolve(runtimePath, "providers/firebase") },
+						},
+					},
+					imageHosts: ["lh3.googleusercontent.com"],
+					imagePlaceholder: "/sample-missing.png",
+				},
+			},
+			"@pinia/nuxt": {
+				version: ">=0.11.0",
+			},
+		};
+	},
+});

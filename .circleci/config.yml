@@ -1,0 +1,154 @@
+# Javascript Node CircleCI 2.1 configuration file
+#
+# Check https://circleci.com/docs/language-javascript/ for more details
+
+# Extras
+# Yarn 1.22.22 issue: https://github.com/yarnpkg/yarn/issues/9015#issuecomment-2141841791
+
+version: 2.1
+defaults: &defaults
+    working_directory: ~/repo
+    docker:
+        - image: cimg/node:20.19.3
+    environment:
+        YARN_NPM_AUTH_TOKEN: $GITHUB_TOKEN
+        HUSKY: 0
+
+release: &release
+    <<: *defaults
+    steps:
+        - checkout
+        - attach_workspace:
+              at: ~/repo
+        - restore_cache:
+              name: Restore Yarn Package Cache
+              key: yarn-{{ .Environment.CACHE_VERSION }}-{{ checksum "yarn.lock" }}
+        - run:
+              name: Install dependencies
+              command: yarn
+        - run:
+              name: Release to github packages
+              command: yarn release
+
+jobs:
+    setup:
+        <<: *defaults
+        steps:
+            - checkout
+            - run: yarn set version berry
+            # Download and cache dependencies
+            - restore_cache:
+                  name: Restore Yarn Package Cache
+                  key: yarn-{{ .Environment.CACHE_VERSION }}-{{ checksum "yarn.lock" }}
+            - run:
+                  name: Install dependencies
+                  command: yarn
+            - save_cache:
+                  name: Save Yarn packages cache
+                  key: yarn-{{ .Environment.CACHE_VERSION }}-{{ checksum "yarn.lock" }}
+                  paths:
+                      - node_modules
+            - run:
+                  name: Define environment variable with lastest commit's message
+                  command: |
+                      echo 'export COMMIT_MESSAGE=$(git log -1 --pretty=format:"%s")' >> $BASH_ENV
+                      source $BASH_ENV
+            - run:
+                  name: Lint commit message
+                  command: echo "$COMMIT_MESSAGE" | npx commitlint
+            - run: yarn prettier .yarnrc.yml --write --ignore-unknown
+            - run:
+                  name: Prepare Packages
+                  command: yarn prepare
+            - persist_to_workspace:
+                  root: ~/repo
+                  paths:
+                      - lib
+                      - .nuxt
+                      - .yarnrc.yml
+                      - .yarn
+
+    tests:
+        <<: *defaults
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: ~/repo
+            - restore_cache:
+                  name: Restore Yarn Package Cache
+                  key: yarn-{{ .Environment.CACHE_VERSION }}-{{ checksum "yarn.lock" }}
+            - run:
+                  name: Install dependencies
+                  command: yarn
+            - run:
+                  name: Run linter & code formatting check
+                  command: yarn lint
+            - run:
+                  name: Run typecheck
+                  command: yarn typecheck
+
+    prerelease:
+        <<: *release
+
+    dry_release:
+        <<: *defaults
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: ~/repo
+            - restore_cache:
+                  name: Restore Yarn Package Cache
+                  key: yarn-{{ .Environment.CACHE_VERSION }}-{{ checksum "yarn.lock" }}
+            - run:
+                  name: Install dependencies
+                  command: yarn
+            - run:
+                  name: Dry release
+                  command: yarn release:dry
+
+    release:
+        <<: *release
+
+workflows:
+    check_workflow:
+        jobs:
+            - setup:
+                  context: npm-deploy
+            - tests:
+                  context: npm-deploy
+                  requires:
+                      - setup
+            - prerelease:
+                  context: npm-deploy
+                  requires:
+                      - tests
+                  filters:
+                      branches:
+                          only:
+                              - next
+            - dry_release:
+                  context: npm-deploy
+                  requires:
+                      - setup
+                  filters:
+                      branches:
+                          only:
+                              - master
+            - approve_release:
+                  type: approval
+                  requires:
+                      - setup
+                  filters:
+                      branches:
+                          only:
+                              - master
+            - release:
+                  context: npm-deploy
+                  requires:
+                      - tests
+                      - dry_release
+                      - approve_release
+                  filters:
+                      branches:
+                          only:
+                              - master

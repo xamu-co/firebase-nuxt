@@ -1,0 +1,163 @@
+{
+  "name": "@open-xamu-co/firebase-nuxt",
+  "version": "0.0.1",
+  "description": "Nuxt 3 module for the xamu project",
+  "author": "@xamu-co",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xamu-co/firebase-nuxt.git"
+  },
+  "keywords": [
+    "nuxt layer firebase",
+    "nuxt layer",
+    "nuxt"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xamu-co/firebase-nuxt/issues"
+  },
+  "homepage": "https://github.com/xamu-co/firebase-nuxt#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "yarn build:prepack && nuxt-module-build build",
+    "build:prepack": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
+    "dev": "nuxi dev playground",
+    "dev:build": "nuxi build playground",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "release": "semantic-release",
+    "release:dry": "semantic-release --dry-run",
+    "lint:eslint": "eslint --ext .ts,.js,.vue --ignore-path .prettierignore .",
+    "lint:prettier": "prettier . --check --ignore-unknown",
+    "lint:stylelint": "node scripts/stylelint.cjs",
+    "lint": "yarn lint:eslint && yarn lint:prettier && yarn lint:stylelint",
+    "typecheck": "yarn build:prepack && vue-tsc --noEmit",
+    "prepare": "node .husky/install.mjs && nuxt-module-build prepare"
+  },
+  "packageManager": "yarn@4.8.0",
+  "engines": {
+    "node": ">=20.19.3"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs",
+      "default": "./dist/module.mjs"
+    },
+    "./client": {
+      "types": "./dist/runtime/client/types/index.d.ts",
+      "import": "./dist/runtime/client/types/index.d.ts",
+      "default": "./dist/runtime/client/types/index.d.ts"
+    },
+    "./client/*": {
+      "types": "./dist/runtime/client/*.d.ts",
+      "import": "./dist/runtime/client/*.ts",
+      "default": "./dist/runtime/client/*.ts"
+    },
+    "./functions": {
+      "types": "./dist/runtime/functions/types/index.d.ts",
+      "import": "./dist/runtime/functions/types/index.d.ts",
+      "default": "./dist/runtime/functions/types/index.d.ts"
+    },
+    "./functions/*": {
+      "types": "./dist/runtime/functions/*.d.ts",
+      "import": "./dist/runtime/functions/*.ts",
+      "default": "./dist/runtime/functions/*.ts"
+    },
+    "./server": {
+      "types": "./dist/runtime/server/types/index.d.ts",
+      "import": "./dist/runtime/server/types/index.d.ts",
+      "default": "./dist/runtime/server/types/index.d.ts"
+    },
+    "./server/*": {
+      "types": "./dist/runtime/server/*.d.ts",
+      "import": "./dist/runtime/server/*.ts",
+      "default": "./dist/runtime/server/*.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@nuxt/kit": "^3.20.2",
+    "@open-xamu-co/ui-common-enums": "^4.0.0-next.1",
+    "@open-xamu-co/ui-common-helpers": "^4.0.0-next.2",
+    "@open-xamu-co/ui-nuxt": "^4.0.0-next.4",
+    "@pinia/nuxt": "^0.11.0",
+    "firebase": "^11.0.2",
+    "firebase-admin": "^13.6.0",
+    "firebase-functions": "^6.6.0",
+    "lodash-es": "^4.17.21",
+    "nuxt-csurf": "^1.6.5",
+    "pinia": "^3.0.2",
+    "vue-router-better-scroller": "^0.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^9.1.1",
+    "@commitlint/config-conventional": "^9.1.1",
+    "@firebase/app-types": "^0.9.0",
+    "@nuxt/module-builder": "^1.0.2",
+    "@nuxt/schema": "^3.20.2",
+    "@nuxt/test-utils": "^3.21.0",
+    "@open-xamu-co/eslint-config": "^3.0.1",
+    "@open-xamu-co/ui-common-types": "^4.0.0-next.3",
+    "@open-xamu-co/ui-styles": "^5.0.0-next.2",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/exec": "^7.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@types/accept-language-parser": "^1.5.8",
+    "@types/lodash-es": "^4",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "cross-env": "^10.1.0",
+    "cssnano": "^6.0.1",
+    "cssnano-preset-advanced": "^6.0.1",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-vue": "^9.15.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "nuxi": "^3.31.2",
+    "nuxt": "^3.20.2",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "postcss-html": "^1.8.0",
+    "postcss-merge-at-rules": "vis97c/postcss-merge-at-rules",
+    "postcss-precision": "vis97c/postcss-precision",
+    "postcss-preset-env": "^8.4.1",
+    "postcss-scss": "^4.0.9",
+    "postcss-sort-media-queries": "^5.2.0",
+    "prettier": "^3.7.4",
+    "sass": "^1.97.0",
+    "semantic-release": "^24.2.3",
+    "semantic-release-yarn": "^3.0.2",
+    "stylelint": "^16.26.1",
+    "stylelint-config-recommended-scss": "^16.0.2",
+    "stylelint-config-recommended-vue": "^1.6.1",
+    "stylelint-config-standard-scss": "^16.0.0",
+    "stylelint-prettier": "^5.0.3",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16",
+    "vue-tsc": "^3.2.1"
+  },
+  "lint-staged": {
+    "*.{ts,js,vue}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "browserslist": [
+    "defaults"
+  ]
+}

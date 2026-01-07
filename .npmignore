@@ -1,0 +1,19 @@
+# folders
+.vscode
+.circleci
+.yarn
+.nuxt
+.output
+node_modules
+
+# files
+.releaserc
+.env
+.eslintrc
+.prettierrc
+.prettierignore
+.gitignore
+.yarnrc.yml
+tsconfig.json
+*.lock
+*.log

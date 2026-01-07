@@ -1,0 +1,20 @@
+{
+  // https://nuxt.com/docs/guide/concepts/typescript
+  "extends": "./.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "skipLibCheck": true,
+    "lib": [
+      "ESNext",
+      "ESNext.asynciterable",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "sourceMap": true,
+  },
+  "exclude": [
+    "../module"
+  ]
+}

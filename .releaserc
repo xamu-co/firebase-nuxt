@@ -1,0 +1,22 @@
+{
+  "branches": [
+    "master",
+    {
+      "name": "next",
+      "prerelease": true
+    }
+  ],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogTitle": "Firebase nuxt"
+      }
+    ],
+    "semantic-release-yarn",
+    "@semantic-release/github",
+    "@semantic-release/git"
+  ]
+}

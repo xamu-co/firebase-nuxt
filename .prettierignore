@@ -1,0 +1,12 @@
+lib/
+public/svg
+static/
+node_modules/
+.idea/
+.nuxt/
+.output/
+*.json
+*.svg
+.*rc
+*.gql
+CHANGELOG.md
