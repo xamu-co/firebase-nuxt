@@ -11,7 +11,7 @@ defaults: &defaults
     docker:
         - image: cimg/node:20.19.3
     environment:
-        YARN_NPM_AUTH_TOKEN: $GITHUB_TOKEN
+        YARN_NPM_AUTH_TOKEN: $NPM_TOKEN
         HUSKY: 0
 
 release: &release

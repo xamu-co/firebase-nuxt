@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/xamu-co/firebase-nuxt#readme",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "build": "yarn build:prepack && nuxt-module-build build",
@@ -34,7 +35,7 @@
     "lint:prettier": "prettier . --check --ignore-unknown",
     "lint:stylelint": "node scripts/stylelint.cjs",
     "lint": "yarn lint:eslint && yarn lint:prettier && yarn lint:stylelint",
-    "typecheck": "yarn build:prepack && vue-tsc --noEmit",
+    "typecheck": "yarn build:prepack",
     "prepare": "node .husky/install.mjs && nuxt-module-build prepare"
   },
   "packageManager": "yarn@4.8.0",

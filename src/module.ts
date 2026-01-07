@@ -10,7 +10,7 @@ import {
 
 import type { FirebaseNuxtModuleOptions } from "./types";
 import { locale } from "./runtime/client/utils/locale";
-import { publicRuntimeConfig } from "./runtime/server/utils/environment";
+import { debugNuxt, publicRuntimeConfig, port } from "./runtime/server/utils/environment";
 
 /**
  * Nuxt module for @open-xamu-co/firebase-nuxt
@@ -32,7 +32,17 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		const runtimePath = resolve("./runtime");
 
 		// Update nuxt options
+		nuxt.options.devtools.enabled = debugNuxt;
+		nuxt.options.devtools.timeline = { enabled: debugNuxt };
 		nuxt.options.experimental.asyncContext = true;
+		nuxt.options.experimental.viewTransition = true;
+		nuxt.options.nitro.compressPublicAssets = true;
+
+		if (debugNuxt) {
+			nuxt.options.devServer = { ...nuxt.options.devServer, host: "0.0.0.0", port };
+		}
+
+		// Set runtime config
 		nuxt.options.runtimeConfig.public = {
 			...nuxt.options.runtimeConfig.public,
 			...publicRuntimeConfig,
@@ -48,8 +58,15 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		addImportsDir(resolve(runtimePath, "composables"));
 
 		// Register components (Auto import)
-		addComponentsDir({
-			path: resolve(runtimePath, "components"),
+		addComponentsDir({ path: resolve(runtimePath, "components") });
+
+		// Register public assets
+		nuxt.hook("nitro:config", (nitroConfig) => {
+			nitroConfig.publicAssets ||= [];
+			nitroConfig.publicAssets.push({
+				dir: resolve(runtimePath, "public"),
+				maxAge: 60 * 60 * 24 * 365, // 1 year
+			});
 		});
 
 		// Register server virtual templates

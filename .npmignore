@@ -5,6 +5,10 @@
 .nuxt
 .output
 node_modules
+scripts
+playground
+test
+src
 
 # files
 .releaserc
