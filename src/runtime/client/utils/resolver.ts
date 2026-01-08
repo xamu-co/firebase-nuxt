@@ -21,6 +21,7 @@ export function resolveSnapshotDefaults<
 	const dateFields: Record<string, Date> = {};
 
 	for (const key in node) {
+		// TODO: match against any field of date type
 		if (key.endsWith("At") && node[key] && "toDate" in node[key]) {
 			dateFields[key] = node[key]?.toDate();
 		}
@@ -72,11 +73,12 @@ export function makeResolveRefs(resolver: Resolver) {
 					.filter((k) => k && k.startsWith(newKey))
 					.map((k) => k.replace(`${newKey.toString()}.`, ""));
 
-				// transform firebase paths
+				// Transform firebase paths
+				// TODO: match against any field of type ref or ref[]
 				if (key.endsWith("Ref")) {
 					const ref = <PseudoDocumentReference<PseudoNode>>node[key];
 
-					// omit user if non authorized
+					// Omit user if non authorized
 					if (!omit.includes(newKey) && typeof ref === "object" && ref !== null) {
 						let innerLevel = level;
 

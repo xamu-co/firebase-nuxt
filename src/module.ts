@@ -21,12 +21,6 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		configKey: "firebaseNuxt",
 		compatibility: { nuxt: "^3.0.0" },
 	},
-	defaults: {
-		// Set module defaults
-		tenants: false,
-		readCollection: () => false,
-		sudo: () => false,
-	},
 	async setup(moduleOptions, nuxt) {
 		const { resolve } = createResolver(import.meta.url);
 		const runtimePath = resolve("./runtime");
@@ -74,8 +68,9 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		addServerTemplate({
 			filename: "#internal/firebase-nuxt",
 			getContents: () => `
-				export const readCollection = ${moduleOptions.readCollection.toString()};
-				export const sudo = ${moduleOptions.sudo.toString()};
+				export const readInstanceCollection = ${moduleOptions.readInstanceCollection?.toString() || "() => false"};
+				export const readCollection = ${moduleOptions.readCollection?.toString() || "() => false"};
+				export const sudo = ${moduleOptions.sudo?.toString() || "() => false"};
 			`,
 		});
 
@@ -89,7 +84,7 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 			handler: resolve(runtimePath, "server/middleware/1.context"),
 		});
 
-		// Register server handlers
+		// Register server handlers, global
 		addServerHandler({
 			method: "get",
 			route: "/api/all/:collectionId",
@@ -98,6 +93,23 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		addServerHandler({
 			method: "get",
 			route: "/api/all/:collectionId/:documentId",
+			handler: resolve(runtimePath, "server/api/all-collection-document.get"),
+		});
+		addServerHandler({
+			method: "get",
+			route: "/api/media/[...path]",
+			handler: resolve(runtimePath, "server/api/media.get"),
+		});
+
+		// Register server handlers, instance
+		addServerHandler({
+			method: "get",
+			route: "/api/instance/all/:collectionId",
+			handler: resolve(runtimePath, "server/api/all-collection.get"),
+		});
+		addServerHandler({
+			method: "get",
+			route: "/api/instance/all/:collectionId/:documentId",
 			handler: resolve(runtimePath, "server/api/all-collection-document.get"),
 		});
 	},
