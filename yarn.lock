@@ -3214,7 +3214,7 @@ __metadata:
     "@open-xamu-co/ui-common-enums": "npm:^4.0.0-next.1"
     "@open-xamu-co/ui-common-helpers": "npm:^4.0.0-next.2"
     "@open-xamu-co/ui-common-types": "npm:^4.0.0-next.3"
-    "@open-xamu-co/ui-nuxt": "npm:^4.0.0-next.5"
+    "@open-xamu-co/ui-nuxt": "npm:^4.0.0-next.6"
     "@open-xamu-co/ui-styles": "npm:^5.0.0-next.2"
     "@pinia/nuxt": "npm:^0.11.0"
     "@semantic-release/changelog": "npm:^6.0.3"
@@ -3326,9 +3326,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@open-xamu-co/ui-nuxt@npm:^4.0.0-next.5":
-  version: 4.0.0-next.5
-  resolution: "@open-xamu-co/ui-nuxt@npm:4.0.0-next.5"
+"@open-xamu-co/ui-nuxt@npm:^4.0.0-next.6":
+  version: 4.0.0-next.6
+  resolution: "@open-xamu-co/ui-nuxt@npm:4.0.0-next.6"
   dependencies:
     "@nuxt/image": "npm:^1.10.0"
     "@nuxt/kit": "npm:^3.20.2"
@@ -3338,7 +3338,7 @@ __metadata:
     lodash-es: "npm:^4.17.21"
     nuxt-countries-api: "npm:^2.0.0"
     sweetalert2: "npm:^11.11.1"
-  checksum: 10c0/3b1a316ea92f366ba1c9abced3a21eb8e4d8f7762ff96ccf2a0bfff4dafdb117aed5fb66d2ca0faaf6cb487e613c3ff9cae1945ea034a216eac38dbd26ded80e
+  checksum: 10c0/9341d14ff7b465d7125f44dd15b3d17de48495a5354c4f65b8c4564e03460b75753df413192436864045a3c7d389ce2d3963a78ec64806d76114638608ce8dba
   languageName: node
   linkType: hard
 

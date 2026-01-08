@@ -131,6 +131,7 @@ const cachedBufferHandler = defineCachedFunction(
 /**
  * Media endpoint
  *
+ * Buffer check because of nitro issue:
  * @see https://github.com/unjs/nitro/issues/1894
  */
 export default defineEventHandler(async (event) => {
