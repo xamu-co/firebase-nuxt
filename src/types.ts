@@ -30,9 +30,7 @@ export interface FirebaseNuxtModuleOptions {
 	sudo: (context: H3Context) => boolean;
 }
 
-declare module "nuxt/schema" {
-	interface PublicRuntimeConfig extends FirebaseNuxtPublicRuntimeConfig {}
-}
+// Do not use unscoped schema
 declare module "@nuxt/schema" {
 	interface PublicRuntimeConfig extends FirebaseNuxtPublicRuntimeConfig {}
 }
