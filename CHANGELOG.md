@@ -1,5 +1,12 @@
 Firebase nuxt
 
+# [1.0.0-next.4](https://github.com/xamu-co/firebase-nuxt/compare/v1.0.0-next.3...v1.0.0-next.4) (2026-01-08)
+
+
+### Bug Fixes
+
+* include missing distributables ([a455111](https://github.com/xamu-co/firebase-nuxt/commit/a455111cb9500bc5755590cdd45da4b6e46f8ee3))
+
 # [1.0.0-next.3](https://github.com/xamu-co/firebase-nuxt/compare/v1.0.0-next.2...v1.0.0-next.3) (2026-01-08)
 
 
