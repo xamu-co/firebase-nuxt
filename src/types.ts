@@ -8,6 +8,8 @@ import type { FirebaseNuxtPublicRuntimeConfig } from "./runtime/server/utils/env
 export interface FirebaseNuxtModuleOptions {
 	/** Enable tenants */
 	tenants: boolean;
+	/** Enable media */
+	media: boolean;
 	/**
 	 * Whether the current auth is authorized to read the given instance's collection
 	 *

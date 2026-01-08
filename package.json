@@ -86,7 +86,7 @@
     "@nuxt/kit": "^3.20.2",
     "@open-xamu-co/ui-common-enums": "^4.0.0-next.1",
     "@open-xamu-co/ui-common-helpers": "^4.0.0-next.2",
-    "@open-xamu-co/ui-nuxt": "^4.0.0-next.4",
+    "@open-xamu-co/ui-nuxt": "^4.0.0-next.5",
     "@pinia/nuxt": "^0.11.0",
     "firebase": "^11.0.2",
     "firebase-admin": "^13.6.0",

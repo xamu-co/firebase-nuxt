@@ -106,6 +106,15 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 			handler: resolve(runtimePath, "server/middleware/1.context"),
 		});
 
+		// Register server handlers, media
+		if (moduleOptions.media) {
+			addServerHandler({
+				method: "get",
+				route: "/api/media/[...path]",
+				handler: resolve(runtimePath, "server/api/media.get"),
+			});
+		}
+
 		// Register server handlers, global
 		addServerHandler({
 			method: "get",
@@ -116,11 +125,6 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 			method: "get",
 			route: "/api/all/:collectionId/:documentId",
 			handler: resolve(runtimePath, "server/api/all-collection-document.get"),
-		});
-		addServerHandler({
-			method: "get",
-			route: "/api/media/[...path]",
-			handler: resolve(runtimePath, "server/api/media.get"),
 		});
 
 		// Register server handlers, instance
@@ -149,22 +153,6 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 					locale,
 					lang: "es",
 					country: "CO",
-					swal: {
-						overrides: {
-							customClass: {
-								confirmButton: ["bttn"],
-								cancelButton: ["bttnToggle"],
-								denyButton: ["link"],
-							},
-						},
-						preventOverrides: {
-							customClass: {
-								confirmButton: ["bttn", "--tm-danger-light"],
-								cancelButton: ["bttnToggle"],
-								denyButton: ["link"],
-							},
-						},
-					},
 					image: {
 						provider: "firebase",
 						domains: ["firebasestorage.googleapis.com"],
