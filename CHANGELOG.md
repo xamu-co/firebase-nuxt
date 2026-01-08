@@ -1,5 +1,12 @@
 Firebase nuxt
 
+# [1.0.0-next.5](https://github.com/xamu-co/firebase-nuxt/compare/v1.0.0-next.4...v1.0.0-next.5) (2026-01-08)
+
+
+### Bug Fixes
+
+* remove problematic schema ([c53c195](https://github.com/xamu-co/firebase-nuxt/commit/c53c1952d5713e75479d4d32d99645d5fccb9a1f))
+
 # [1.0.0-next.4](https://github.com/xamu-co/firebase-nuxt/compare/v1.0.0-next.3...v1.0.0-next.4) (2026-01-08)
 
 
