@@ -68,6 +68,26 @@ jobs:
                       - .yarnrc.yml
                       - .yarn
 
+    build:
+        <<: *defaults
+        steps:
+            - checkout
+            # Download and cache dependencies
+            - restore_cache:
+                  name: Restore Yarn Package Cache
+                  key: yarn-{{ .Environment.CACHE_VERSION }}-{{ checksum "yarn.lock" }}
+            - run:
+                  name: Install dependencies
+                  command: yarn
+            - run:
+                  name: Build distributables
+                  command: yarn build
+            - persist_to_workspace:
+                  root: ~/repo
+                  paths:
+                      - dist
+                      - .nuxt
+
     tests:
         <<: *defaults
         steps:
@@ -118,10 +138,15 @@ workflows:
                   context: npm-deploy
                   requires:
                       - setup
+            - build:
+                  context: npm-deploy
+                  requires:
+                      - setup
             - prerelease:
                   context: npm-deploy
                   requires:
                       - tests
+                      - build
                   filters:
                       branches:
                           only:
@@ -146,6 +171,7 @@ workflows:
                   context: npm-deploy
                   requires:
                       - tests
+                      - build
                       - dry_release
                       - approve_release
                   filters:
