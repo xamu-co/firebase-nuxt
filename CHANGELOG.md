@@ -1,5 +1,12 @@
 Firebase nuxt
 
+# [1.0.0-next.2](https://github.com/xamu-co/firebase-nuxt/compare/v1.0.0-next.1...v1.0.0-next.2) (2026-01-08)
+
+
+### Features
+
+* get instance documents & files ([4846801](https://github.com/xamu-co/firebase-nuxt/commit/4846801d6b80fb95fde8475943ef872351ba43ac))
+
 # 1.0.0-next.1 (2026-01-08)
 
 
