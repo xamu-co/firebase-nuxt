@@ -50,33 +50,33 @@
     },
     "./client": {
       "types": "./dist/runtime/client/types/index.d.ts",
-      "import": "./dist/runtime/client/types/index.d.ts",
-      "default": "./dist/runtime/client/types/index.d.ts"
+      "import": "./dist/runtime/client/types/index.js",
+      "default": "./dist/runtime/client/types/index.js"
     },
     "./client/*": {
-      "types": "./dist/runtime/client/*.d.ts",
-      "import": "./dist/runtime/client/*.ts",
-      "default": "./dist/runtime/client/*.ts"
+      "types": "./dist/runtime/client/utils/*.d.ts",
+      "import": "./dist/runtime/client/utils/*.js",
+      "default": "./dist/runtime/client/utils/*.js"
     },
     "./functions": {
       "types": "./dist/runtime/functions/types/index.d.ts",
-      "import": "./dist/runtime/functions/types/index.d.ts",
-      "default": "./dist/runtime/functions/types/index.d.ts"
+      "import": "./dist/runtime/functions/types/index.js",
+      "default": "./dist/runtime/functions/types/index.js"
     },
     "./functions/*": {
-      "types": "./dist/runtime/functions/*.d.ts",
-      "import": "./dist/runtime/functions/*.ts",
-      "default": "./dist/runtime/functions/*.ts"
+      "types": "./dist/runtime/functions/utils/*.d.ts",
+      "import": "./dist/runtime/functions/utils/*.js",
+      "default": "./dist/runtime/functions/utils/*.js"
     },
     "./server": {
       "types": "./dist/runtime/server/types/index.d.ts",
-      "import": "./dist/runtime/server/types/index.d.ts",
-      "default": "./dist/runtime/server/types/index.d.ts"
+      "import": "./dist/runtime/server/types/index.js",
+      "default": "./dist/runtime/server/types/index.js"
     },
     "./server/*": {
-      "types": "./dist/runtime/server/*.d.ts",
-      "import": "./dist/runtime/server/*.ts",
-      "default": "./dist/runtime/server/*.ts"
+      "types": "./dist/runtime/server/utils/*.d.ts",
+      "import": "./dist/runtime/server/utils/*.js",
+      "default": "./dist/runtime/server/utils/*.js"
     }
   },
   "files": [

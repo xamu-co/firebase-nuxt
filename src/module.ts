@@ -31,6 +31,28 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		nuxt.options.experimental.asyncContext = true;
 		nuxt.options.experimental.viewTransition = true;
 		nuxt.options.nitro.compressPublicAssets = true;
+		nuxt.options.vite.optimizeDeps = {
+			...nuxt.options.vite.optimizeDeps,
+			exclude: [
+				...(nuxt.options.vite.optimizeDeps?.exclude || []),
+				// Server imports
+				"nitropack/runtime",
+			],
+		};
+		// Dedupe pinia
+		nuxt.options.vite.resolve = {
+			...nuxt.options.vite.resolve,
+			dedupe: [
+				...(nuxt.options.vite.resolve?.dedupe || []),
+				"firebase",
+				"firebase/app",
+				"firebase/auth",
+				"firebase/app-check",
+				"firebase/firestore",
+				"firebase/analytics",
+				"pinia",
+			],
+		};
 
 		if (debugNuxt) {
 			nuxt.options.devServer = { ...nuxt.options.devServer, host: "0.0.0.0", port };
@@ -44,9 +66,9 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		};
 
 		// Register plugins (Manually)
-		addPlugin(resolve(runtimePath, "plugins/loaded.client"));
 		addPlugin(resolve(runtimePath, "plugins/scrollBehavior.client"));
 		addPlugin(resolve(runtimePath, "plugins/firebase-setup"));
+		addPlugin(resolve(runtimePath, "plugins/loaded.client"));
 
 		// Register composables (Auto import)
 		addImportsDir(resolve(runtimePath, "composables"));

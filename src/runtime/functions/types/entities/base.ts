@@ -1,6 +1,6 @@
 import type { FieldValue, Timestamp } from "firebase-admin/firestore";
 
-import type { ePaymentValidator } from "../../enums";
+import type { ePaymentValidator } from "../../utils/enums";
 
 export type FirebaseValues<T extends FirebaseData> = { [K in keyof T]?: T[K] | FieldValue };
 

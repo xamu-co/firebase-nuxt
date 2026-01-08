@@ -108,8 +108,9 @@ export const useSessionStore = defineStore("session", () => {
 
 	return {
 		// User
-		user: skipHydrate(user),
 		token: skipHydrate(token),
+		expiredToken: skipHydrate(expiredToken),
+		user: skipHydrate(user),
 		// User getters
 		path,
 		// User actions
