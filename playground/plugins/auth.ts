@@ -11,8 +11,8 @@ import { defineNuxtPlugin, useNuxtApp, useSessionStore } from "#imports";
  * @plugin
  */
 export default defineNuxtPlugin({
-	name: "firebase",
-	dependsOn: ["firebase-setup"],
+	name: "auth",
+	dependsOn: ["pinia", "firebase-setup"],
 	setup() {
 		if (import.meta.server) return;
 

@@ -21,13 +21,9 @@ export interface SharedDocument extends FirebaseDocument {
 }
 
 /** @output Root instance*/
-export interface Root extends SharedDocument, FromData<RootData> {
-	ownedBy?: InstanceMember;
-}
+export interface Root extends SharedDocument, FromData<RootData> {}
 /** @input Omit automation */
-export interface RootRef extends GetSharedRef<Root> {
-	ownedByRef?: DocumentReference<InstanceMember, InstanceMemberRef> | FieldValue;
-}
+export interface RootRef extends GetSharedRef<Root> {}
 
 /** @output App instance */
 export interface Instance extends SharedDocument, FromData<InstanceData> {}

@@ -15,7 +15,7 @@ declare global {
 	}
 }
 
-interface ClientProvide {
+export interface ClientProvide {
 	clientAppCheck: AppCheck;
 	clientFirebaseApp: FirebaseApp;
 	clientFirestore: Firestore;
@@ -33,7 +33,7 @@ interface ClientProvide {
 export default defineNuxtPlugin({
 	name: "firebase-setup",
 	dependsOn: ["pinia"],
-	setup({ $config }) {
+	setup({ $config }): { provide: Partial<ClientProvide> } {
 		const provide: Partial<ClientProvide> = {};
 
 		if (import.meta.server) return { provide };
@@ -43,29 +43,33 @@ export default defineNuxtPlugin({
 		// Do not crash if firebase config is not provided
 		if (!firebaseConfig.projectId) return { provide };
 
-		// Initialize Firebase
-		provide.resolveClientRefs = makeResolveRefs(getDoc);
-		provide.clientFirebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
+		try {
+			// Initialize Firebase
+			provide.resolveClientRefs = makeResolveRefs(getDoc);
+			provide.clientFirebaseApp = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
-		// Initialize Firestore, ignore undefined values
-		initializeFirestore(provide.clientFirebaseApp, { ignoreUndefinedProperties: true });
-		provide.clientFirestore = getFirestore(provide.clientFirebaseApp);
+			// Initialize Firestore, ignore undefined values
+			initializeFirestore(provide.clientFirebaseApp, { ignoreUndefinedProperties: true });
+			provide.clientFirestore = getFirestore(provide.clientFirebaseApp);
 
-		// Initialize Auth
-		provide.clientAuth = getAuth(provide.clientFirebaseApp);
+			// Initialize Auth
+			provide.clientAuth = getAuth(provide.clientFirebaseApp);
 
-		// Initialize AppCheck
-		self.FIREBASE_APPCHECK_DEBUG_TOKEN = debugAppCheck;
-		provide.clientAppCheck = initializeAppCheck(provide.clientFirebaseApp, {
-			provider: new ReCaptchaEnterpriseProvider(recaptchaEnterpriseKey),
-			isTokenAutoRefreshEnabled: true,
-		});
+			// Initialize AppCheck
+			self.FIREBASE_APPCHECK_DEBUG_TOKEN = debugAppCheck;
+			provide.clientAppCheck = initializeAppCheck(provide.clientFirebaseApp, {
+				provider: new ReCaptchaEnterpriseProvider(recaptchaEnterpriseKey),
+				isTokenAutoRefreshEnabled: true,
+			});
 
-		// Initialize Analytics
-		getAnalytics(provide.clientFirebaseApp);
+			// Initialize Analytics
+			getAnalytics(provide.clientFirebaseApp);
 
-		// Initialize Performance Monitoring
-		getPerformance(provide.clientFirebaseApp);
+			// Initialize Performance Monitoring
+			getPerformance(provide.clientFirebaseApp);
+		} catch (err) {
+			console.error("Firebase Setup Error", err);
+		}
 
 		return { provide };
 	},

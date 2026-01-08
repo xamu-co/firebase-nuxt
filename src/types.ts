@@ -1,3 +1,4 @@
+import type { ClientProvide } from "./runtime/plugins/firebase-setup";
 import type { H3Context } from "./runtime/server/types";
 import type { FirebaseNuxtPublicRuntimeConfig } from "./runtime/server/utils/environment";
 
@@ -7,6 +8,8 @@ import type { FirebaseNuxtPublicRuntimeConfig } from "./runtime/server/utils/env
 export interface FirebaseNuxtModuleOptions {
 	/** Enable tenants */
 	tenants: boolean;
+	/** Enable media */
+	media: boolean;
 	/**
 	 * Whether the current auth is authorized to read the given instance's collection
 	 *
@@ -32,4 +35,12 @@ declare module "nuxt/schema" {
 }
 declare module "@nuxt/schema" {
 	interface PublicRuntimeConfig extends FirebaseNuxtPublicRuntimeConfig {}
+}
+
+type Decorate<T extends Record<string, any>> = {
+	[K in keyof T as K extends string ? `$${K}` : never]: T[K];
+};
+
+declare module "#app" {
+	interface NuxtApp extends Decorate<ClientProvide> {}
 }

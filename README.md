@@ -59,9 +59,6 @@ F_CLIENT_EMAIL=""
 # App check, site key, public
 RECAPTCHA_ENTERPRISE_SITE_KEY=
 
-# Google fonts
-FONTS_API_KEY=
-
 # Project
 ORIGIN=
 COUNTRIES_API=
