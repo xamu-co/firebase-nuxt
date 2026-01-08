@@ -8,13 +8,19 @@ export interface FirebaseNuxtModuleOptions {
 	/** Enable tenants */
 	tenants: boolean;
 	/**
-	 * Wheter the current auth is authorized to read the given collection
+	 * Whether the current auth is authorized to read the given instance's collection
+	 *
+	 * @server Runs server side only
+	 */
+	readInstanceCollection: (collection: string, context: H3Context) => boolean;
+	/**
+	 * Whether the current auth is authorized to read the given collection
 	 *
 	 * @server Runs server side only
 	 */
 	readCollection: (collection: string, context: H3Context) => boolean;
 	/**
-	 * Wheter the current auth is a super user
+	 * Whether the current auth is a super user
 	 *
 	 * @server Runs server side only
 	 */

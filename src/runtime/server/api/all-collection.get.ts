@@ -13,7 +13,7 @@ import {
 import { apiLogger, getServerFirebase } from "../utils/firebase";
 
 // @ts-expect-error virtual file
-import { readCollection } from "#internal/firebase-nuxt";
+import { readCollection, readInstanceCollection } from "#internal/firebase-nuxt";
 
 /**
  * Get the edges from a given instance sub-collection
@@ -24,28 +24,41 @@ import { readCollection } from "#internal/firebase-nuxt";
 export default defineConditionallyCachedEventHandler(
 	async (event) => {
 		const fieldDocument = FieldPath.documentId();
-		const { firebaseFirestore } = getServerFirebase("api:all:collection");
+		const { firebaseFirestore } = getServerFirebase("api:all:[collectionId]");
+		const { currentInstanceRef } = event.context;
 
 		try {
 			const params = getQuery(event);
 			const page = getBoolean(params.page);
 			const collectionId = getRouterParam(event, "collectionId");
 
-			debugFirebaseServer(event, "api:all:collection", collectionId);
+			debugFirebaseServer(event, "api:all:[collectionId]", collectionId);
 
 			if (!collectionId) {
 				throw createError({ statusCode: 400, statusMessage: `collectionId is required` });
 			}
 
+			let query: Query = firebaseFirestore.collection(collectionId);
+
 			// Prevent listing unauthorized collections
-			if (!readCollection(collectionId, event.context)) {
+			if (event.path.startsWith("/api/instance/all")) {
+				if (!readInstanceCollection(collectionId, event.context)) {
+					throw createError({
+						statusCode: 401,
+						statusMessage: `Can't list "instance/${collectionId}"`,
+					});
+				} else if (!currentInstanceRef) {
+					throw createError({ statusCode: 401, statusMessage: "Missing instance" });
+				}
+
+				// Instance is required
+				query = currentInstanceRef.collection(collectionId);
+			} else if (!readCollection(collectionId, event.context)) {
 				throw createError({
 					statusCode: 401,
-					statusMessage: `Couldn't list "${collectionId}"`,
+					statusMessage: `Can't list "${collectionId}"`,
 				});
 			}
-
-			let query: Query = firebaseFirestore.collection(collectionId);
 
 			// filtered query cannot be mixed with any other query type
 			if (params.include) {
@@ -54,7 +67,7 @@ export default defineConditionallyCachedEventHandler(
 				// clean & filter
 				include = include.filter((uid) => uid && !getBoolean(uid)).map(getDocumentId);
 
-				debugFirebaseServer(event, "getFilteredCollection", include);
+				debugFirebaseServer(event, "api:all:[collectionId]:filtered", include);
 
 				// Do not fetch empty list
 				if (!include.length) return [];
