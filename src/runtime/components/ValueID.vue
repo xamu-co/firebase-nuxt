@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-	import { eIdDocumentType } from "../functions/enums";
+	import { eIdDocumentType } from "../functions/utils/enums";
 
 	/**
 	 * Value user document

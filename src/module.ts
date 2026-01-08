@@ -21,12 +21,6 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		configKey: "firebaseNuxt",
 		compatibility: { nuxt: "^3.0.0" },
 	},
-	defaults: {
-		// Set module defaults
-		tenants: false,
-		readCollection: () => false,
-		sudo: () => false,
-	},
 	async setup(moduleOptions, nuxt) {
 		const { resolve } = createResolver(import.meta.url);
 		const runtimePath = resolve("./runtime");
@@ -37,6 +31,28 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		nuxt.options.experimental.asyncContext = true;
 		nuxt.options.experimental.viewTransition = true;
 		nuxt.options.nitro.compressPublicAssets = true;
+		nuxt.options.vite.optimizeDeps = {
+			...nuxt.options.vite.optimizeDeps,
+			exclude: [
+				...(nuxt.options.vite.optimizeDeps?.exclude || []),
+				// Server imports
+				"nitropack/runtime",
+			],
+		};
+		// Dedupe pinia
+		nuxt.options.vite.resolve = {
+			...nuxt.options.vite.resolve,
+			dedupe: [
+				...(nuxt.options.vite.resolve?.dedupe || []),
+				"firebase",
+				"firebase/app",
+				"firebase/auth",
+				"firebase/app-check",
+				"firebase/firestore",
+				"firebase/analytics",
+				"pinia",
+			],
+		};
 
 		if (debugNuxt) {
 			nuxt.options.devServer = { ...nuxt.options.devServer, host: "0.0.0.0", port };
@@ -50,9 +66,9 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		};
 
 		// Register plugins (Manually)
-		addPlugin(resolve(runtimePath, "plugins/loaded.client"));
 		addPlugin(resolve(runtimePath, "plugins/scrollBehavior.client"));
 		addPlugin(resolve(runtimePath, "plugins/firebase-setup"));
+		addPlugin(resolve(runtimePath, "plugins/loaded.client"));
 
 		// Register composables (Auto import)
 		addImportsDir(resolve(runtimePath, "composables"));
@@ -74,8 +90,9 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		addServerTemplate({
 			filename: "#internal/firebase-nuxt",
 			getContents: () => `
-				export const readCollection = ${moduleOptions.readCollection.toString()};
-				export const sudo = ${moduleOptions.sudo.toString()};
+				export const readInstanceCollection = ${moduleOptions.readInstanceCollection?.toString() || "() => false"};
+				export const readCollection = ${moduleOptions.readCollection?.toString() || "() => false"};
+				export const sudo = ${moduleOptions.sudo?.toString() || "() => false"};
 			`,
 		});
 
@@ -89,7 +106,16 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 			handler: resolve(runtimePath, "server/middleware/1.context"),
 		});
 
-		// Register server handlers
+		// Register server handlers, media
+		if (moduleOptions.media) {
+			addServerHandler({
+				method: "get",
+				route: "/api/media/[...path]",
+				handler: resolve(runtimePath, "server/api/media.get"),
+			});
+		}
+
+		// Register server handlers, global
 		addServerHandler({
 			method: "get",
 			route: "/api/all/:collectionId",
@@ -98,6 +124,18 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		addServerHandler({
 			method: "get",
 			route: "/api/all/:collectionId/:documentId",
+			handler: resolve(runtimePath, "server/api/all-collection-document.get"),
+		});
+
+		// Register server handlers, instance
+		addServerHandler({
+			method: "get",
+			route: "/api/instance/all/:collectionId",
+			handler: resolve(runtimePath, "server/api/all-collection.get"),
+		});
+		addServerHandler({
+			method: "get",
+			route: "/api/instance/all/:collectionId/:documentId",
 			handler: resolve(runtimePath, "server/api/all-collection-document.get"),
 		});
 	},
@@ -115,22 +153,6 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 					locale,
 					lang: "es",
 					country: "CO",
-					swal: {
-						overrides: {
-							customClass: {
-								confirmButton: ["bttn"],
-								cancelButton: ["bttnToggle"],
-								denyButton: ["link"],
-							},
-						},
-						preventOverrides: {
-							customClass: {
-								confirmButton: ["bttn", "--tm-danger-light"],
-								cancelButton: ["bttnToggle"],
-								denyButton: ["link"],
-							},
-						},
-					},
 					image: {
 						provider: "firebase",
 						domains: ["firebasestorage.googleapis.com"],

@@ -1,3 +1,4 @@
+import type { CollectionReference } from "firebase-admin/firestore";
 import { createError, getRouterParam, isError, setResponseStatus } from "h3";
 
 import { defineConditionallyCachedEventHandler } from "../utils/cache";
@@ -5,7 +6,7 @@ import { debugFirebaseServer, resolveServerDocumentRefs } from "../utils/firesto
 import { apiLogger, getServerFirebase } from "../utils/firebase";
 
 // @ts-expect-error virtual file
-import { readCollection } from "#internal/firebase-nuxt";
+import { readCollection, readInstanceCollection } from "#internal/firebase-nuxt";
 
 /**
  * Get a document from a given collection
@@ -14,13 +15,19 @@ import { readCollection } from "#internal/firebase-nuxt";
  */
 export default defineConditionallyCachedEventHandler(
 	async (event) => {
-		const { firebaseFirestore } = getServerFirebase("api:all:collection:documentId");
+		const { firebaseFirestore } = getServerFirebase("api:all:[collectionId]:[documentId]");
+		const { currentInstanceRef } = event.context;
 
 		try {
 			const collectionId = getRouterParam(event, "collectionId");
 			const documentId = getRouterParam(event, "documentId");
 
-			debugFirebaseServer(event, "api:all:collection:documentId", collectionId, documentId);
+			debugFirebaseServer(
+				event,
+				"api:all:[collectionId]:[documentId]",
+				collectionId,
+				documentId
+			);
 
 			if (!collectionId || !documentId) {
 				throw createError({
@@ -29,15 +36,28 @@ export default defineConditionallyCachedEventHandler(
 				});
 			}
 
-			// Prevent listing unauthorized collections
-			if (!readCollection(collectionId, event.context)) {
+			let collectionRef: CollectionReference = firebaseFirestore.collection(collectionId);
+
+			// Prevent getting unauthorized collections documents
+			if (event.path.startsWith("/api/instance/all")) {
+				if (!readInstanceCollection(collectionId, event.context)) {
+					throw createError({
+						statusCode: 401,
+						statusMessage: `Can't get "instance/${collectionId}" document`,
+					});
+				} else if (!currentInstanceRef) {
+					throw createError({ statusCode: 401, statusMessage: "Missing instance" });
+				}
+
+				// Instance is required
+				collectionRef = currentInstanceRef.collection(collectionId);
+			} else if (!readCollection(collectionId, event.context)) {
 				throw createError({
 					statusCode: 401,
-					statusMessage: `Couldn't list "${collectionId}"`,
+					statusMessage: `Can't get "${collectionId}" document`,
 				});
 			}
 
-			const collectionRef = firebaseFirestore.collection(collectionId);
 			const documentsRef = collectionRef.doc(documentId);
 			const documentSnapshot = await documentsRef.get();
 

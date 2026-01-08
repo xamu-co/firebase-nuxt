@@ -28,6 +28,6 @@ export default defineNuxtConfig({
 		},
 	},
 	css: ["@open-xamu-co/ui-styles/dist/index.min.css"],
-	modules: ["@open-xamu-co/firebase-nuxt"],
+	modules: ["../src/module"],
 	devtools: { enabled: true },
 });

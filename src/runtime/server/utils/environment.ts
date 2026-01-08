@@ -1,7 +1,7 @@
 import type { FirebaseOptions } from "firebase/app";
 import { defineString, defineBoolean, defineInt } from "firebase-functions/params";
 
-import { eCacheControl } from "../../functions/enums";
+import { eCacheControl } from "../../functions/utils/enums";
 
 /**
  * Public runtime config

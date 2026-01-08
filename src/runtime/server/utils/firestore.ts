@@ -52,9 +52,7 @@ export function resolveServerDocumentRefs<
 	if (!snapshot?.exists) {
 		let statusMessage = `No "${collection}" matched`;
 
-		if (snapshot?.ref.path) {
-			statusMessage = `No "${collection}" matched for ${snapshot.ref.path}`;
-		}
+		if (snapshot?.ref.path) statusMessage = `${statusMessage} for ${snapshot.ref.path}`;
 
 		throw createError({ statusCode: 404, statusMessage });
 	}

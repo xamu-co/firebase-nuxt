@@ -4,6 +4,7 @@ import { defineNuxtPlugin, useAppStore } from "#imports";
 
 export default defineNuxtPlugin({
 	name: "loaded",
+	dependsOn: ["pinia", "firebase-setup"],
 	parallel: true,
 	setup: ({ hook }) => {
 		hook("app:mounted", () => {
