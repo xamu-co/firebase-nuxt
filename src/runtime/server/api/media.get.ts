@@ -50,13 +50,13 @@ const cachedBufferHandler = defineCachedFunction(
 
 		// Prevent getting unauthorized collections files
 		if (collectionId === "instances" && !fileOrSubCollectionId.includes(".")) {
-			if (!readInstanceCollection(fileOrSubCollectionId, event.context)) {
+			if (!currentInstanceRef) {
+				throw createError({ statusCode: 401, statusMessage: "Missing instance" });
+			} else if (!readInstanceCollection(fileOrSubCollectionId, event.context)) {
 				throw createError({
 					statusCode: 401,
 					statusMessage: `Can't get "instance/${fileOrSubCollectionId}" file`,
 				});
-			} else if (!currentInstanceRef) {
-				throw createError({ statusCode: 401, statusMessage: "Missing instance" });
 			}
 		} else if (!readCollection(collectionId, event.context)) {
 			throw createError({
@@ -162,6 +162,7 @@ export default defineEventHandler(async (event) => {
 		// Remove media cache
 		await storage.removeItem(`nitro:functions:getMedia:${hash}.json`);
 
+		// Bypass nuxt errors
 		if (isError(err)) {
 			// Do not log if file isn't ready
 			if (err.statusCode !== 503) apiLogger(event, "api:media:[...path]", err.message, err);

@@ -42,13 +42,13 @@ export default defineConditionallyCachedEventHandler(
 
 			// Prevent listing unauthorized collections
 			if (event.path.startsWith("/api/instance/all")) {
-				if (!readInstanceCollection(collectionId, event.context)) {
+				if (!currentInstanceRef) {
+					throw createError({ statusCode: 401, statusMessage: "Missing instance" });
+				} else if (!readInstanceCollection(collectionId, event.context)) {
 					throw createError({
 						statusCode: 401,
 						statusMessage: `Can't list "instance/${collectionId}"`,
 					});
-				} else if (!currentInstanceRef) {
-					throw createError({ statusCode: 401, statusMessage: "Missing instance" });
 				}
 
 				// Instance is required
@@ -92,6 +92,7 @@ export default defineConditionallyCachedEventHandler(
 
 			return getQueryAsEdges(event, query.limit(first));
 		} catch (err) {
+			// Bypass nuxt errors
 			if (isError(err)) {
 				apiLogger(event, "api:all:[collectionId]", err.message, err);
 

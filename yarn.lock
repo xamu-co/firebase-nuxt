@@ -3235,7 +3235,7 @@ __metadata:
     eslint-plugin-vue: "npm:^9.15.1"
     firebase: "npm:^11.0.2"
     firebase-admin: "npm:^13.6.0"
-    firebase-functions: "npm:^6.6.0"
+    firebase-functions: "npm:^7.0.3"
     husky: "npm:^9.1.7"
     lint-staged: "npm:^16.2.7"
     lodash-es: "npm:^4.17.21"
@@ -9416,9 +9416,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase-functions@npm:^6.6.0":
-  version: 6.6.0
-  resolution: "firebase-functions@npm:6.6.0"
+"firebase-functions@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "firebase-functions@npm:7.0.3"
   dependencies:
     "@types/cors": "npm:^2.8.5"
     "@types/express": "npm:^4.17.21"
@@ -9426,10 +9426,17 @@ __metadata:
     express: "npm:^4.21.0"
     protobufjs: "npm:^7.2.2"
   peerDependencies:
+    "@apollo/server": ^5.2.0
+    "@as-integrations/express4": ^1.1.2
     firebase-admin: ^11.10.0 || ^12.0.0 || ^13.0.0
+  peerDependenciesMeta:
+    "@apollo/server":
+      optional: true
+    "@as-integrations/express4":
+      optional: true
   bin:
     firebase-functions: lib/bin/firebase-functions.js
-  checksum: 10c0/ed38561be91f7760d5b9d4908c4cc1b231f9c936103e9aec03018bc18a5eba39fcea273136dc239cf70aa851b188eb9c65c0cb4f40694f42a6775b470856456b
+  checksum: 10c0/2fb8cbfe46255fb5204e5e150a74531c6fb5c86dbffbe64534c80221da2899188c21d4a788a5b19cb3a0885ff35d5cf716e52c119c5df1c28eb1d7eaa52ef93c
   languageName: node
   linkType: hard
 

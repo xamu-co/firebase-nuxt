@@ -1,5 +1,4 @@
 import type { QueryDocumentSnapshot } from "firebase-admin/firestore";
-import { omit } from "lodash-es";
 import {
 	onDocumentDeleted,
 	onDocumentCreated,
@@ -7,12 +6,13 @@ import {
 } from "firebase-functions/v2/firestore";
 import { onSchedule as onScheduleV2 } from "firebase-functions/v2/scheduler";
 import { onTaskDispatched, type Request } from "firebase-functions/tasks";
+import omit from "lodash-es/omit.js";
 
 import type { tLogger } from "@open-xamu-co/ui-common-types";
 
 import type { SharedData } from "../types/entities/instance";
-import { getFirebase } from "./firebase";
-import { makeFunctionsLogger } from "./logger";
+import { getFirebase } from "./firebase.js";
+import { makeFunctionsLogger } from "./logger.js";
 
 /**
  * Get document path

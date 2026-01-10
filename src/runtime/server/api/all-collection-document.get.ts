@@ -40,16 +40,16 @@ export default defineConditionallyCachedEventHandler(
 
 			// Prevent getting unauthorized collections documents
 			if (event.path.startsWith("/api/instance/all")) {
-				if (!readInstanceCollection(collectionId, event.context)) {
+				// Instance is required
+				if (!currentInstanceRef) {
+					throw createError({ statusCode: 401, statusMessage: "Missing instance" });
+				} else if (!readInstanceCollection(collectionId, event.context)) {
 					throw createError({
 						statusCode: 401,
 						statusMessage: `Can't get "instance/${collectionId}" document`,
 					});
-				} else if (!currentInstanceRef) {
-					throw createError({ statusCode: 401, statusMessage: "Missing instance" });
 				}
 
-				// Instance is required
 				collectionRef = currentInstanceRef.collection(collectionId);
 			} else if (!readCollection(collectionId, event.context)) {
 				throw createError({
@@ -63,6 +63,7 @@ export default defineConditionallyCachedEventHandler(
 
 			return resolveServerDocumentRefs(event, documentSnapshot, collectionId);
 		} catch (err) {
+			// Bypass nuxt errors
 			if (isError(err)) {
 				apiLogger(event, "api:all:[collectionId]:[documentId]", err.message, err);
 
