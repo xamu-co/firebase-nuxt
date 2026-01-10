@@ -1,5 +1,12 @@
 Firebase nuxt
 
+## [1.1.1-next.2](https://github.com/xamu-co/firebase-nuxt/compare/v1.1.1-next.1...v1.1.1-next.2) (2026-01-10)
+
+
+### Bug Fixes
+
+* handle get app errors on get firebase helper ([3e6f7f1](https://github.com/xamu-co/firebase-nuxt/commit/3e6f7f1c35bc2b23595d6e5ce01755b8da9a8efc))
+
 ## [1.1.1-next.1](https://github.com/xamu-co/firebase-nuxt/compare/v1.1.0...v1.1.1-next.1) (2026-01-10)
 
 
