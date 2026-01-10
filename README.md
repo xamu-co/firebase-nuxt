@@ -36,8 +36,6 @@ yarn build
 
 ## Extras
 
-Due to an [issue with volar](https://github.com/vuejs/language-tools/issues/5018#issuecomment-2495098549), typescript version is fixed at @5.6.3
-
 Firebase requires 2 keys, the private one from recaptcha, and the site key from recaptcha enterprise. The former one is passed from the config file.
 
 For app check create the key from Recaptcha v3 console instead of enterprise to avoid issues with legacy keys validation. The debug token allows bypassing the validation on dev environments
