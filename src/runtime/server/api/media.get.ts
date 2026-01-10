@@ -162,6 +162,7 @@ export default defineEventHandler(async (event) => {
 		// Remove media cache
 		await storage.removeItem(`nitro:functions:getMedia:${hash}.json`);
 
+		// Bypass nuxt errors
 		if (isError(err)) {
 			// Do not log if file isn't ready
 			if (err.statusCode !== 503) apiLogger(event, "api:media:[...path]", err.message, err);

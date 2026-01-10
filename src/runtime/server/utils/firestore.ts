@@ -48,7 +48,7 @@ export function debugFirebaseServer<T extends EventHandlerRequest>(
 export function resolveServerDocumentRefs<
 	T extends PseudoNode,
 	R extends FirebaseDocument = FirebaseDocument,
->(event: H3Event, snapshot?: DocumentSnapshot<T>, collection = "documents", withAuth?: boolean) {
+>(event: H3Event, snapshot?: DocumentSnapshot<T, R>, collection = "documents", withAuth?: boolean) {
 	if (!snapshot?.exists) {
 		let statusMessage = `No "${collection}" matched`;
 

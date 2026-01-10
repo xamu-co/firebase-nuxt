@@ -2,7 +2,7 @@ import { DocumentReference, type Firestore } from "firebase-admin/firestore";
 
 import type { tLogger } from "@open-xamu-co/ui-common-types";
 
-import { getLog } from "./logs";
+import { getLog } from "./logs.js";
 
 export function makeFunctionsLogger(
 	at: DocumentReference | Firestore,

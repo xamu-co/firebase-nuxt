@@ -92,6 +92,7 @@ export default defineConditionallyCachedEventHandler(
 
 			return getQueryAsEdges(event, query.limit(first));
 		} catch (err) {
+			// Bypass nuxt errors
 			if (isError(err)) {
 				apiLogger(event, "api:all:[collectionId]", err.message, err);
 

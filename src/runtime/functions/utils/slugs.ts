@@ -1,5 +1,5 @@
 import type { DocumentReference, Firestore, Query } from "firebase-admin/firestore";
-import kebabCase from "lodash-es/kebabCase";
+import kebabCase from "lodash-es/kebabCase.js";
 
 export function makeGetSlug(collectionId: string) {
 	return async (

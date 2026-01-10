@@ -63,6 +63,7 @@ export default defineConditionallyCachedEventHandler(
 
 			return resolveServerDocumentRefs(event, documentSnapshot, collectionId);
 		} catch (err) {
+			// Bypass nuxt errors
 			if (isError(err)) {
 				apiLogger(event, "api:all:[collectionId]:[documentId]", err.message, err);
 

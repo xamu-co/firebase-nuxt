@@ -150,6 +150,7 @@ export default defineEventHandler(async (event) => {
 		// Remove instance cache
 		await storage.removeItem(`nitro:functions:getInstance:${cleanHost}.json`);
 
+		// Bypass nuxt errors
 		if (isError(err)) {
 			apiLogger(
 				event,
