@@ -1,5 +1,13 @@
 Firebase nuxt
 
+## [1.1.1-next.1](https://github.com/xamu-co/firebase-nuxt/compare/v1.1.0...v1.1.1-next.1) (2026-01-10)
+
+
+### Bug Fixes
+
+* resolve firebase deploy sdk compatibility ([fd7df17](https://github.com/xamu-co/firebase-nuxt/commit/fd7df1779f772ddcc0ebd868a70f82633491d7ca))
+* validate instance first ([7726ce7](https://github.com/xamu-co/firebase-nuxt/commit/7726ce71c80f0c3840c529a210871bf248dfec5f))
+
 # [1.1.0](https://github.com/xamu-co/firebase-nuxt/compare/v1.0.0...v1.1.0) (2026-01-08)
 
 
