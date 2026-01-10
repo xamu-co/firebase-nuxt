@@ -14,7 +14,7 @@
 	 * @component
 	 */
 	defineProps<{
-		value: number;
+		value: any;
 		node?: {
 			user?: {
 				documentType?: eIdDocumentType;
