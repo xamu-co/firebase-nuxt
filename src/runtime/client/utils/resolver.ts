@@ -6,6 +6,17 @@ import type {
 	PseudoNode,
 } from "../types/firestore";
 
+/** Cached document */
+interface iCachedDocument<
+	T extends PseudoNode = PseudoNode,
+	R extends FirebaseDocument = FromData<T>,
+> {
+	/** Original snapshot */
+	snapshot: PseudoDocumentSnapshot<T, R>;
+	/** Resolved data*/
+	data: R;
+}
+
 export function getDocumentId(path = ""): string {
 	// This assumes a simpler db structure
 	return path.split("/").pop() || "";
@@ -41,6 +52,9 @@ type Resolver = <Tr extends PseudoNode, Rr extends FirebaseDocument = FromData<T
  * Get object from firebase snapshot
  */
 export function makeResolveRefs(resolver: Resolver) {
+	/** Store documents for caching */
+	const cache: Record<string, Record<number, any>> = {};
+
 	/**
 	 * Resolve refs from a snapshot recursively
 	 */
@@ -52,18 +66,22 @@ export function makeResolveRefs(resolver: Resolver) {
 		{ level = 0, omit = [] }: iSnapshotConfig = {},
 		withAuth = false
 	): Promise<R | undefined> {
+		const cached: iCachedDocument<T, R> | undefined = cache[snapshot.ref.path]?.[level];
+
+		// Return cached data if available
+		if (cached) return cached.data;
+
 		const exists = typeof snapshot.exists === "function" ? snapshot.exists() : snapshot.exists;
 
 		if (!exists) return;
 
-		const node = snapshot.data() || <T>{};
-		const path = snapshot.ref.path;
-
 		type kT = Extract<keyof T, string>;
 
+		const node = snapshot.data() || <T>{};
+		const path = snapshot.ref.path;
 		const keys = Object.keys(node || {}) as kT[];
 
-		// Resolve all refs in parallel
+		// Resolve all nested refs in parallel
 		await Promise.all(
 			keys.map(async (key) => {
 				if (!Object.hasOwn(node, key)) return;
@@ -167,6 +185,13 @@ export function makeResolveRefs(resolver: Resolver) {
 			})
 		);
 
-		return resolveSnapshotDefaults<T, R>(path, node);
+		// Fix defaults (date fields)
+		const data = resolveSnapshotDefaults<T, R>(path, node);
+
+		// Store in cache
+		cache[snapshot.ref.path] ||= {};
+		cache[snapshot.ref.path][level] = { snapshot, data };
+
+		return data;
 	};
 }
