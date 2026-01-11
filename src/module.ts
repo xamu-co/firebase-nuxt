@@ -10,7 +10,12 @@ import {
 
 import type { FirebaseNuxtModuleOptions } from "./types";
 import { locale } from "./runtime/client/utils/locale";
-import { debugNuxt, publicRuntimeConfig, port } from "./runtime/server/utils/environment";
+import {
+	debugNuxt,
+	publicRuntimeConfig,
+	port,
+	csurfSecret,
+} from "./runtime/server/utils/environment";
 
 /**
  * Nuxt module for @open-xamu-co/firebase-nuxt
@@ -117,10 +122,11 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		});
 
 		// Register server handlers, media
+		// @see https://github.com/nuxt/nuxt/issues/34044#issuecomment-3735519341
 		if (moduleOptions.media) {
 			addServerHandler({
 				method: "get",
-				route: "/api/media/[...path]",
+				route: "/api/media/**:path",
 				handler: resolve(runtimePath, "server/api/media.get"),
 			});
 		}
@@ -158,6 +164,7 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 				version: ">=1.6.5",
 				defaults: {
 					addCsrfTokenToEventCtx: true, // Run server side
+					encryptSecret: csurfSecret,
 				},
 			},
 			"@open-xamu-co/ui-nuxt": {
@@ -166,15 +173,18 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 					locale,
 					lang: "es",
 					country: "CO",
-					image: {
-						provider: "firebase",
-						domains: ["firebasestorage.googleapis.com"],
-						providers: {
-							firebase: { provider: resolve(runtimePath, "providers/firebase") },
-						},
-					},
 					imageHosts: ["lh3.googleusercontent.com"],
 					imagePlaceholder: "/sample-missing.png",
+				},
+			},
+			"@nuxt/image": {
+				version: ">=1.0.0",
+				defaults: {
+					provider: "firebase",
+					domains: ["firebasestorage.googleapis.com"],
+					providers: {
+						firebase: { provider: resolve(runtimePath, "providers/firebase") },
+					},
 				},
 			},
 			"@pinia/nuxt": {

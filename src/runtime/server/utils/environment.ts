@@ -56,8 +56,11 @@ export const clientEmail = defineString("F_CLIENT_EMAIL").value();
 /** App check, public key */
 export const recaptchaEnterpriseKey = defineString("RECAPTCHA_ENTERPRISE_SITE_KEY").value();
 
-// Google fonts
-export const fontsApiKey = defineString("FONTS_API_KEY").value();
+/**
+ * CSurf encryption secret
+ * Required for CSRF protected routes
+ */
+export const csurfSecret = defineString("CSURF_SECRET").value();
 
 /**
  * Firebase client data
