@@ -1,5 +1,17 @@
 Firebase nuxt
 
+# [1.2.0-next.1](https://github.com/xamu-co/firebase-nuxt/compare/v1.1.1-next.3...v1.2.0-next.1) (2026-01-11)
+
+
+### Bug Fixes
+
+* use navigateTo ([05eb413](https://github.com/xamu-co/firebase-nuxt/commit/05eb413dd143b5a01dc70b21bf9500aa7a83cf04))
+
+
+### Features
+
+* resolver with cache ([d629ce1](https://github.com/xamu-co/firebase-nuxt/commit/d629ce13a14a30c66aaee648133a914c2de2ecc8))
+
 ## [1.1.1-next.3](https://github.com/xamu-co/firebase-nuxt/compare/v1.1.1-next.2...v1.1.1-next.3) (2026-01-11)
 
 
