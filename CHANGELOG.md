@@ -1,5 +1,12 @@
 Firebase nuxt
 
+# [1.2.0-next.2](https://github.com/xamu-co/firebase-nuxt/compare/v1.2.0-next.1...v1.2.0-next.2) (2026-01-11)
+
+
+### Bug Fixes
+
+* get csurf secret from env ([81606ff](https://github.com/xamu-co/firebase-nuxt/commit/81606ff29a5bd8f7435f58ba3bba3d08b2a13d27))
+
 # [1.2.0-next.1](https://github.com/xamu-co/firebase-nuxt/compare/v1.1.1-next.3...v1.2.0-next.1) (2026-01-11)
 
 
