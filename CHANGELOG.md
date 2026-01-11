@@ -1,5 +1,12 @@
 Firebase nuxt
 
+## [1.1.1-next.3](https://github.com/xamu-co/firebase-nuxt/compare/v1.1.1-next.2...v1.1.1-next.3) (2026-01-11)
+
+
+### Bug Fixes
+
+* restore optimization excludes ([e7c0337](https://github.com/xamu-co/firebase-nuxt/commit/e7c0337b2b4c539b833615e592ab26fe907287e9))
+
 ## [1.1.1-next.2](https://github.com/xamu-co/firebase-nuxt/compare/v1.1.1-next.1...v1.1.1-next.2) (2026-01-10)
 
 
