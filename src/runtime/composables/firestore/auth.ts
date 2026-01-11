@@ -11,7 +11,7 @@ import { ref } from "vue";
 
 import { useSwal } from "@open-xamu-co/ui-common-helpers";
 
-import { useAppLogger, useNuxtApp, useRouter, useRoute } from "#imports";
+import { useAppLogger, useNuxtApp, useRoute, navigateTo } from "#imports";
 
 export function useGoogleAuth(defaultRdrPath = "/") {
 	const { $clientAuth } = useNuxtApp();
@@ -20,7 +20,6 @@ export function useGoogleAuth(defaultRdrPath = "/") {
 	const loading = ref(false);
 
 	const loginWithGoogle = debounce(async (): Promise<void> => {
-		const router = useRouter();
 		const route = useRoute();
 		const { restricted } = route.query;
 
@@ -49,7 +48,7 @@ export function useGoogleAuth(defaultRdrPath = "/") {
 			}
 
 			// rdr, Restricted rdr handled by plugin
-			if (!restricted) router.push({ path: defaultRdrPath });
+			if (!restricted) navigateTo({ path: defaultRdrPath });
 		} catch (err) {
 			Swal.fire({
 				title: "¡Algo sucedió!",

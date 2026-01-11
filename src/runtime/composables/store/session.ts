@@ -85,7 +85,7 @@ export const useSessionStore = defineStore("session", () => {
 			window.location.href = "/"; // rdr & reload page
 		}
 	}
-	async function remove(navigateTo: (...args: any[]) => any, clientAuth?: Auth) {
+	async function remove(clientAuth?: Auth) {
 		if (import.meta.server) return;
 
 		const Swal = useSwal();
@@ -100,7 +100,7 @@ export const useSessionStore = defineStore("session", () => {
 
 		if (user && value) {
 			await deleteUser(user);
-			navigateTo("/"); // rdr & reload page
+			window.location.href = "/"; // rdr & reload page
 		}
 	}
 
