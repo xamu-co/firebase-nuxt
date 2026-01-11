@@ -1,7 +1,6 @@
 import { deleteUser, type Auth } from "firebase/auth";
 import { defineStore, skipHydrate } from "pinia";
 import { computed } from "vue";
-import { useRouter } from "vue-router";
 
 import type { InstanceMember, User } from "../../client/types";
 import { getDocumentId } from "../../client/utils/resolver";
@@ -86,10 +85,9 @@ export const useSessionStore = defineStore("session", () => {
 			window.location.href = "/"; // rdr & reload page
 		}
 	}
-	async function remove(clientAuth?: Auth) {
+	async function remove(navigateTo: (...args: any[]) => any, clientAuth?: Auth) {
 		if (import.meta.server) return;
 
-		const router = useRouter();
 		const Swal = useSwal();
 
 		const { value } = await Swal.firePrevent({
@@ -102,7 +100,7 @@ export const useSessionStore = defineStore("session", () => {
 
 		if (user && value) {
 			await deleteUser(user);
-			router.push("/"); // rdr & reload page
+			navigateTo("/"); // rdr & reload page
 		}
 	}
 

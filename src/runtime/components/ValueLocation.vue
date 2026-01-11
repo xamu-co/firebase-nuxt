@@ -12,7 +12,7 @@
 	 * @component
 	 */
 	const props = defineProps<{
-		value: number;
+		value: any;
 		node?: {
 			locationCity?: string;
 			locationState?: string;

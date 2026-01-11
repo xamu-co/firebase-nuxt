@@ -25,35 +25,45 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		const { resolve } = createResolver(import.meta.url);
 		const runtimePath = resolve("./runtime");
 
+		const firebaseDeps: string[] = [
+			"firebase",
+			"firebase/app",
+			"firebase/auth",
+			"firebase/app-check",
+			"firebase/firestore",
+			"firebase/analytics",
+		];
+
 		// Update nuxt options
 		nuxt.options.devtools.enabled = debugNuxt;
 		nuxt.options.devtools.timeline = { enabled: debugNuxt };
 		nuxt.options.experimental.asyncContext = true;
 		nuxt.options.experimental.viewTransition = true;
 		nuxt.options.nitro.compressPublicAssets = true;
+
+		// Prevent optimization
 		nuxt.options.vite.optimizeDeps = {
 			...nuxt.options.vite.optimizeDeps,
 			exclude: [
 				...(nuxt.options.vite.optimizeDeps?.exclude || []),
+				...firebaseDeps,
 				// Server imports
 				"nitropack/runtime",
 			],
 		};
-		// Dedupe pinia
+
+		// Dedupe deps
 		nuxt.options.vite.resolve = {
 			...nuxt.options.vite.resolve,
 			dedupe: [
 				...(nuxt.options.vite.resolve?.dedupe || []),
-				"firebase",
-				"firebase/app",
-				"firebase/auth",
-				"firebase/app-check",
-				"firebase/firestore",
-				"firebase/analytics",
+				...firebaseDeps,
+				// Pinia store
 				"pinia",
 			],
 		};
 
+		// Expose dev server
 		if (debugNuxt) {
 			nuxt.options.devServer = { ...nuxt.options.devServer, host: "0.0.0.0", port };
 		}
@@ -146,6 +156,9 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		return {
 			"nuxt-csurf": {
 				version: ">=1.6.5",
+				defaults: {
+					addCsrfTokenToEventCtx: true, // Run server side
+				},
 			},
 			"@open-xamu-co/ui-nuxt": {
 				version: ">=4.0.0-next.4",

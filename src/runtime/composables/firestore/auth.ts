@@ -8,11 +8,10 @@ import {
 } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
 
 import { useSwal } from "@open-xamu-co/ui-common-helpers";
 
-import { useAppLogger, useNuxtApp } from "#imports";
+import { useAppLogger, useNuxtApp, useRouter, useRoute } from "#imports";
 
 export function useGoogleAuth(defaultRdrPath = "/") {
 	const { $clientAuth } = useNuxtApp();
