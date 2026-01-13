@@ -1,4 +1,4 @@
-import type { PriceData } from "../types/entities/base";
+import type { PriceData } from "../types/entities/base.js";
 
 export interface iPriceProps extends Pick<PriceData, "price" | "base" | "iva"> {
 	quantity?: number;

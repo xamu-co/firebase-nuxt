@@ -5,9 +5,10 @@ import { defineCachedFunction } from "nitropack/runtime";
 import type { H3Context } from "../types";
 import type { Instance } from "../../client/types";
 import type { InstanceData } from "../../functions/types";
-import { production, forcedInstanceId } from "../utils/environment";
 import { debugFirebaseServer, resolveServerDocumentRefs } from "./firestore";
 import { getServerFirebase } from "./firebase";
+
+import { useRuntimeConfig } from "#imports";
 
 /**
  * Get the current instance if it exists
@@ -20,6 +21,7 @@ import { getServerFirebase } from "./firebase";
  */
 export const getInstance = defineCachedFunction(
 	async (event, fullHost: string): Promise<NonNullable<H3Context["currentInstance"]>> => {
+		const { production, forcedInstanceId } = useRuntimeConfig().public;
 		const { firebaseFirestore } = getServerFirebase("api:getInstance");
 		const instancesRef: CollectionReference<InstanceData> =
 			firebaseFirestore.collection("instances");
@@ -96,19 +98,26 @@ export const getInstance = defineCachedFunction(
  */
 export const getRootInstance = defineCachedFunction(
 	async (event): Promise<Instance | undefined> => {
+		const { rootInstanceId } = useRuntimeConfig().public;
 		const { firebaseFirestore } = getServerFirebase("api:getRootInstance");
 		const instancesRef: CollectionReference<InstanceData> =
 			firebaseFirestore.collection("instances");
 
 		debugFirebaseServer(event, "middleware:getRootInstance");
 
-		const snapshot: DocumentSnapshot<InstanceData> = await instancesRef.doc("root").get();
+		const snapshot: DocumentSnapshot<InstanceData> = await instancesRef
+			.doc(rootInstanceId)
+			.get();
 
 		return resolveServerDocumentRefs(event, snapshot, "instances", false) || {};
 	},
 	{
 		name: "getRootInstance",
 		maxAge: 60 * 60 * 24, // 1 day
-		getKey: (_) => "root",
+		getKey: (_) => {
+			const { rootInstanceId } = useRuntimeConfig().public;
+
+			return rootInstanceId;
+		},
 	}
 );

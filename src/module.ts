@@ -40,8 +40,8 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		];
 
 		// Update nuxt options
-		nuxt.options.devtools.enabled = debugNuxt;
-		nuxt.options.devtools.timeline = { enabled: debugNuxt };
+		nuxt.options.devtools.enabled = debugNuxt.value();
+		nuxt.options.devtools.timeline = { enabled: debugNuxt.value() };
 		nuxt.options.experimental.asyncContext = true;
 		nuxt.options.experimental.viewTransition = true;
 		nuxt.options.nitro.compressPublicAssets = true;
@@ -69,14 +69,18 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		};
 
 		// Expose dev server
-		if (debugNuxt) {
-			nuxt.options.devServer = { ...nuxt.options.devServer, host: "0.0.0.0", port };
+		if (debugNuxt.value()) {
+			nuxt.options.devServer = {
+				...nuxt.options.devServer,
+				host: "0.0.0.0",
+				port: port.value(),
+			};
 		}
 
 		// Set runtime config
 		nuxt.options.runtimeConfig.public = {
 			...nuxt.options.runtimeConfig.public,
-			...publicRuntimeConfig,
+			...publicRuntimeConfig.value(),
 			tenants: moduleOptions.tenants, // Globally available
 		};
 
@@ -132,28 +136,32 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		}
 
 		// Register server handlers, global
-		addServerHandler({
-			method: "get",
-			route: "/api/all/:collectionId",
-			handler: resolve(runtimePath, "server/api/all-collection.get"),
-		});
-		addServerHandler({
-			method: "get",
-			route: "/api/all/:collectionId/:documentId",
-			handler: resolve(runtimePath, "server/api/all-collection-document.get"),
-		});
+		if (moduleOptions.readCollection) {
+			addServerHandler({
+				method: "get",
+				route: "/api/all/:collectionId",
+				handler: resolve(runtimePath, "server/api/all-collection.get"),
+			});
+			addServerHandler({
+				method: "get",
+				route: "/api/all/:collectionId/:documentId",
+				handler: resolve(runtimePath, "server/api/all-collection-document.get"),
+			});
+		}
 
 		// Register server handlers, instance
-		addServerHandler({
-			method: "get",
-			route: "/api/instance/all/:collectionId",
-			handler: resolve(runtimePath, "server/api/all-collection.get"),
-		});
-		addServerHandler({
-			method: "get",
-			route: "/api/instance/all/:collectionId/:documentId",
-			handler: resolve(runtimePath, "server/api/all-collection-document.get"),
-		});
+		if (moduleOptions.readInstanceCollection) {
+			addServerHandler({
+				method: "get",
+				route: "/api/instance/all/:collectionId",
+				handler: resolve(runtimePath, "server/api/all-collection.get"),
+			});
+			addServerHandler({
+				method: "get",
+				route: "/api/instance/all/:collectionId/:documentId",
+				handler: resolve(runtimePath, "server/api/all-collection-document.get"),
+			});
+		}
 	},
 	moduleDependencies() {
 		const { resolve } = createResolver(import.meta.url);
@@ -164,7 +172,7 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 				version: ">=1.6.5",
 				defaults: {
 					addCsrfTokenToEventCtx: true, // Run server side
-					encryptSecret: csurfSecret || undefined,
+					encryptSecret: csurfSecret.value() || undefined,
 				},
 			},
 			"@open-xamu-co/ui-nuxt": {

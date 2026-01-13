@@ -7,10 +7,7 @@ import type {
 } from "../types/firestore";
 
 /** Cached document */
-interface iCachedDocument<
-	T extends PseudoNode = PseudoNode,
-	R extends FirebaseDocument = FromData<T>,
-> {
+interface iCachedDocument<T extends PseudoNode = PseudoNode, R extends FromData<T> = FromData<T>> {
 	/** Original snapshot */
 	snapshot: PseudoDocumentSnapshot<T, R>;
 	/** Resolved data*/
@@ -23,10 +20,10 @@ export function getDocumentId(path = ""): string {
 }
 
 /** Timestamp breaks nuxt */
-export function resolveSnapshotDefaults<
-	T extends PseudoNode,
-	R extends FirebaseDocument = FromData<T>,
->(id: string, node?: T): R {
+export function resolveSnapshotDefaults<T extends PseudoNode, R extends FromData<T> = FromData<T>>(
+	id: string,
+	node?: T
+): R {
 	if (!node) return {} as R;
 
 	const dateFields: Record<string, Date> = {};
@@ -44,7 +41,7 @@ export function resolveSnapshotDefaults<
 /**
  * Get a document snapshot from a reference
  */
-type Resolver = <Tr extends PseudoNode, Rr extends FirebaseDocument = FromData<Tr>>(
+type Resolver = <Tr extends PseudoNode, Rr extends FromData<Tr> = FromData<Tr>>(
 	ref: PseudoDocumentReference<Tr, Rr>
 ) => Promise<PseudoDocumentSnapshot<Tr, Rr>>;
 
@@ -58,10 +55,7 @@ export function makeResolveRefs(resolver: Resolver) {
 	/**
 	 * Resolve refs from a snapshot recursively
 	 */
-	return async function resolveRefs<
-		T extends PseudoNode,
-		R extends FirebaseDocument = FromData<T>,
-	>(
+	return async function resolveRefs<T extends PseudoNode, R extends FromData<T> = FromData<T>>(
 		snapshot: PseudoDocumentSnapshot<T, R>,
 		{ level = 0, omit = [] }: iSnapshotConfig = {},
 		withAuth = false

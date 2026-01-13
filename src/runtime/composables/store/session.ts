@@ -8,8 +8,6 @@ import { getDocumentId } from "../../client/utils/resolver";
 import { type CookieOptions } from "#app";
 import { useCookie, useRuntimeConfig, useSwal } from "#imports";
 
-interface iSessionUser extends User, Omit<InstanceMember, "user"> {}
-
 const cookieOptionsDefaults = {
 	sameSite: "strict",
 	maxAge: 365 * 24 * 60 * 60, // 1 year
@@ -40,7 +38,7 @@ export const useSessionStore = defineStore("session", () => {
 		...cookieOptions,
 		default: () => false,
 	});
-	const user = useCookie<iSessionUser | undefined>("session.user", {
+	const user = useCookie<(User & Omit<InstanceMember, "user">) | undefined>("session.user", {
 		...cookieOptions,
 		partitioned: false,
 		default: () => undefined,

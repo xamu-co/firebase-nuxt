@@ -49,7 +49,7 @@ export const defineConditionallyCachedEventHandler = <
 
 	return defineEventHandler<T>(async (event: CachedH3Event<T>) => {
 		// Bypass cache for admin purposes
-		if (sudo(event.context) || debugNitro) return handler(event);
+		if (sudo(event.context) || debugNitro.value()) return handler(event);
 
 		return cachedHandler(event);
 	});

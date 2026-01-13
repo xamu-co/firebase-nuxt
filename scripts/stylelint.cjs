@@ -1,7 +1,7 @@
-const { exec } = require("child_process");
-const fs = require("fs");
-const path = require("path");
-const { performance } = require("perf_hooks");
+const { exec } = require("node:child_process");
+const fs = require("node:fs");
+const path = require("node:path");
+const { performance } = require("node:perf_hooks");
 
 function getIgnoredPaths() {
 	const ignoreFilePath = path.join(process.cwd(), ".prettierignore");

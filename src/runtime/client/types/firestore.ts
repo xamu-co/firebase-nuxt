@@ -1,6 +1,6 @@
 import type { iPagination, tLogger } from "@open-xamu-co/ui-common-types";
 
-import type { FirebaseDocument, FromData } from "./entities/base";
+import type { FromData } from "./entities/base";
 
 export interface PseudoNode extends Record<string, any> {
 	[key: `${string}Ref`]: Record<string, any>;
@@ -9,7 +9,7 @@ export interface PseudoNode extends Record<string, any> {
 
 export interface PseudoDocumentSnapshot<
 	T extends PseudoNode,
-	R extends FirebaseDocument = FromData<T>,
+	R extends FromData<T> = FromData<T>,
 > extends Record<string, any> {
 	data(): T | undefined;
 	exists: boolean | (() => this is PseudoDocumentSnapshot<T, R>);
@@ -17,7 +17,7 @@ export interface PseudoDocumentSnapshot<
 
 export interface PseudoDocumentReference<
 	T extends PseudoNode,
-	R extends FirebaseDocument = FromData<T>,
+	R extends FromData<T> = FromData<T>,
 > extends Record<string, any> {
 	get: () => Promise<PseudoDocumentSnapshot<T, R>>;
 	// The following list is here just to appease getDoc on client

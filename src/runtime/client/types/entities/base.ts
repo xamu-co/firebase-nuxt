@@ -2,6 +2,7 @@ import type { DocumentReference, Timestamp } from "firebase/firestore";
 
 import type { GetSharedRef } from "./user";
 import type { SharedDocument } from "./instance";
+import type { FirebaseData } from "../../../functions/types";
 
 export interface FirebaseDocument {
 	/** @automated Document path */
@@ -19,13 +20,17 @@ export interface FirebaseDocument {
 	lock?: boolean | string[];
 }
 
-export type FromData<Data extends Record<string, any>> = {
-	[K in keyof Data as K extends `${string}Ref` | `${string}Refs`
+/**
+ * Clear refs from data
+ *
+ * Utility types return any, so avoid them like the plague
+ */
+export type FromData<Data extends FirebaseData, O extends keyof Data = never> = {
+	[K in keyof Data as K extends O
 		? never
-		: K]: K extends `${string}At` ? string | Date | undefined : Data[K];
-} & {
-	id?: string;
-	lock?: boolean | string[];
+		: K extends `${string}Ref` | `${string}Refs`
+			? never
+			: K]: K extends `${string}At` ? string | Date | undefined : Data[K];
 };
 
 export type GetRef<T extends SharedDocument, O extends keyof T = never> = GetSharedRef<T, O> & {

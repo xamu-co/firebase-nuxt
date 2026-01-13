@@ -74,7 +74,7 @@ export default defineEventHandler(async (event) => {
 			getRequestHeader(event, "Origin") ||
 			`https://${cleanHost}`;
 		const { hostname } = new URL(origin);
-		let corsOrigin = production ? `https://${cleanHost}` : "*";
+		let corsOrigin = production.value() ? `https://${cleanHost}` : "*";
 
 		// Set CORS origin for allowed domains
 		if (instance.config?.domains?.includes(hostname)) corsOrigin = origin;

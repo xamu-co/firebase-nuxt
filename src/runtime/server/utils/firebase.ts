@@ -9,7 +9,11 @@ import { makeLogger } from "../../client/utils/logger";
 import { getFirebase } from "../../functions/utils/firebase";
 
 export function getServerFirebase(at = "Unknown") {
-	const credential = cert({ projectId, privateKey, clientEmail });
+	const credential = cert({
+		projectId: projectId.value(),
+		privateKey: privateKey.value(),
+		clientEmail: clientEmail.value(),
+	});
 
 	return getFirebase(at, { credential });
 }
