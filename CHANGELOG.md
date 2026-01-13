@@ -1,5 +1,17 @@
 Firebase nuxt
 
+# [2.0.0-next.1](https://github.com/xamu-co/firebase-nuxt/compare/v1.2.0-next.2...v2.0.0-next.1) (2026-01-13)
+
+
+### Features
+
+* configurable root instance ([def2d1a](https://github.com/xamu-co/firebase-nuxt/commit/def2d1a9c0a38fe0ddc0a3d2b225952b5c03f6bb))
+
+
+### BREAKING CHANGES
+
+* environment as function params
+
 # [1.2.0-next.2](https://github.com/xamu-co/firebase-nuxt/compare/v1.2.0-next.1...v1.2.0-next.2) (2026-01-11)
 
 
