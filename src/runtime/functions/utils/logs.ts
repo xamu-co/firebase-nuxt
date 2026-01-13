@@ -4,7 +4,7 @@
 
 import type { tLogger } from "@open-xamu-co/ui-common-types";
 
-import type { LogData } from "../types/entities/logs";
+import type { LogData } from "../types/entities/logs.js";
 
 interface iFirebaseError {
 	code: string;

@@ -7,27 +7,27 @@ import type { FirebaseNuxtPublicRuntimeConfig } from "./runtime/server/utils/env
  */
 export interface FirebaseNuxtModuleOptions {
 	/** Enable tenants */
-	tenants: boolean;
+	tenants?: boolean;
 	/** Enable media */
-	media: boolean;
+	media?: boolean;
 	/**
 	 * Whether the current auth is authorized to read the given instance's collection
 	 *
 	 * @server Runs server side only
 	 */
-	readInstanceCollection: (collection: string, context: H3Context) => boolean;
+	readInstanceCollection?: (collection: string, context: H3Context) => boolean;
 	/**
 	 * Whether the current auth is authorized to read the given collection
 	 *
 	 * @server Runs server side only
 	 */
-	readCollection: (collection: string, context: H3Context) => boolean;
+	readCollection?: (collection: string, context: H3Context) => boolean;
 	/**
 	 * Whether the current auth is a super user
 	 *
 	 * @server Runs server side only
 	 */
-	sudo: (context: H3Context) => boolean;
+	sudo?: (context: H3Context) => boolean;
 }
 
 // Do not use unscoped schema

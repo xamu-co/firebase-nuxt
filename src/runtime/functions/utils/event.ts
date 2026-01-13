@@ -10,7 +10,7 @@ import omit from "lodash-es/omit.js";
 
 import type { tLogger } from "@open-xamu-co/ui-common-types";
 
-import type { SharedData } from "../types/entities/instance";
+import type { SharedData } from "../types/entities/instance.js";
 import { getFirebase } from "./firebase.js";
 import { makeFunctionsLogger } from "./logger.js";
 

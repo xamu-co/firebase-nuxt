@@ -67,7 +67,7 @@ const cachedBufferHandler = defineCachedFunction(
 
 		// Setup bucket & get file extension
 		const serverStorage = getStorage();
-		const bucket = serverStorage.bucket(storageBucket);
+		const bucket = serverStorage.bucket(storageBucket.value());
 		const file = bucket.file(baseAndExtension);
 		const [, extension] = baseAndExtension.split(".");
 

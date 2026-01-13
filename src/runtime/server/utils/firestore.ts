@@ -3,14 +3,14 @@ import {
 	type DocumentData,
 	DocumentReference,
 	DocumentSnapshot,
+	QuerySnapshot,
 	Query,
 } from "firebase-admin/firestore";
 import { useEvent } from "nitropack/runtime";
-import { QuerySnapshot } from "@google-cloud/firestore";
 
 import type { iPage, iPageEdge, tLogger, tOrderBy } from "@open-xamu-co/ui-common-types";
 
-import type { PseudoNode, FirebaseDocument, iSnapshotConfig } from "../../client/types";
+import type { PseudoNode, FirebaseDocument, iSnapshotConfig, FromData } from "../../client/types";
 import { getBoolean, isNumberOrString } from "../utils/guards";
 import { makeResolveRefs } from "../../client/utils/resolver";
 import { apiLogger, getServerFirebase } from "./firebase";
@@ -33,7 +33,7 @@ export function debugFirebaseServer<T extends EventHandlerRequest>(
 	mss: string,
 	...args: any[]
 ) {
-	if (debugFirebase && import.meta.server) {
+	if (import.meta.server && debugFirebase.value()) {
 		const url = getRequestURL(event);
 
 		console.group("\x1b[34m%s\x1b[0m", url);
@@ -47,7 +47,7 @@ export function debugFirebaseServer<T extends EventHandlerRequest>(
  */
 export function resolveServerDocumentRefs<
 	T extends PseudoNode,
-	R extends FirebaseDocument = FirebaseDocument,
+	R extends FromData<T> = FromData<T>,
 >(event: H3Event, snapshot?: DocumentSnapshot<T, R>, collection = "documents", withAuth?: boolean) {
 	if (!snapshot?.exists) {
 		let statusMessage = `No "${collection}" matched`;
@@ -67,10 +67,11 @@ export function resolveServerDocumentRefs<
 /**
  * Resolve general refs
  */
-export async function resolveServerRefs<
-	T extends PseudoNode,
-	R extends FirebaseDocument = FirebaseDocument,
->(snapshot: DocumentSnapshot<T, R>, config: iSnapshotConfig = {}, withAuth?: boolean) {
+export async function resolveServerRefs<T extends PseudoNode, R extends FromData<T> = FromData<T>>(
+	snapshot: DocumentSnapshot<T, R>,
+	config: iSnapshotConfig = {},
+	withAuth?: boolean
+) {
 	const event = useEvent();
 	const resolveRefs = makeResolveRefs((ref) => ref.get?.());
 
