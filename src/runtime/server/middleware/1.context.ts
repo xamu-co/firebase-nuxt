@@ -86,10 +86,12 @@ export default defineEventHandler(async (event) => {
 			"Host",
 			"Xamu-Context-Source",
 		].join(", ");
+		const Allow = "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS";
 
 		// Set CORS headers
 		setResponseHeaders(event, {
-			"Access-Control-Allow-Methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+			Allow,
+			"Access-Control-Allow-Methods": Allow,
 			"Access-Control-Allow-Credentials": "true",
 			"Access-Control-Allow-Origin": corsOrigin,
 			Vary: "Host, Origin",

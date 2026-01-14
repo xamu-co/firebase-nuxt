@@ -1,5 +1,5 @@
 import type { CollectionReference } from "firebase-admin/firestore";
-import { createError, getRouterParam, isError, setResponseStatus } from "h3";
+import { createError, getRouterParam, isError, setResponseHeaders, setResponseStatus } from "h3";
 
 import { defineConditionallyCachedEventHandler } from "../utils/cache";
 import { debugFirebaseServer, resolveServerDocumentRefs } from "../utils/firestore";
@@ -17,8 +17,19 @@ export default defineConditionallyCachedEventHandler(
 	async (event) => {
 		const { firebaseFirestore } = getServerFirebase("api:all:[collectionId]:[documentId]");
 		const { currentInstanceRef } = event.context;
+		const Allow = "GET,HEAD,OPTIONS";
 
 		try {
+			// Override CORS headers
+			setResponseHeaders(event, { Allow, "Access-Control-Allow-Methods": Allow });
+
+			// Only GET, HEAD & OPTIONS are allowed
+			if (!event.method?.match(/^(GET|HEAD|OPTIONS)$/i)) {
+				throw createError({ statusCode: 405, statusMessage: "Unsupported method" });
+			} else if (event.method?.match(/^(OPTIONS)$/i)) {
+				return setResponseStatus(event, 204, "No Content");
+			}
+
 			const collectionId = getRouterParam(event, "collectionId");
 			const documentId = getRouterParam(event, "documentId");
 
@@ -61,7 +72,20 @@ export default defineConditionallyCachedEventHandler(
 			const documentsRef = collectionRef.doc(documentId);
 			const documentSnapshot = await documentsRef.get();
 
-			return resolveServerDocumentRefs(event, documentSnapshot, collectionId);
+			if (!documentSnapshot?.exists) {
+				let statusMessage = `No "${collectionId}" document matched`;
+
+				if (documentSnapshot?.ref.path) {
+					statusMessage = `${statusMessage} for ${documentSnapshot.ref.path}`;
+				}
+
+				throw createError({ statusCode: 404, statusMessage });
+			}
+
+			// Bypass body for HEAD requests
+			if (event.method?.match(/^(HEAD)$/i)) return setResponseStatus(event, 200, "OK");
+
+			return resolveServerDocumentRefs(event, documentSnapshot);
 		} catch (err) {
 			// Bypass nuxt errors
 			if (isError(err)) {

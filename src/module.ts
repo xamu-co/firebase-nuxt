@@ -131,7 +131,7 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 			addServerHandler({
 				method: "get",
 				route: "/api/media/**:path",
-				handler: resolve(runtimePath, "server/api/media.get"),
+				handler: resolve(runtimePath, "server/api/media"),
 			});
 		}
 
@@ -140,12 +140,12 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 			addServerHandler({
 				method: "get",
 				route: "/api/all/:collectionId",
-				handler: resolve(runtimePath, "server/api/all-collection.get"),
+				handler: resolve(runtimePath, "server/api/all-collection"),
 			});
 			addServerHandler({
 				method: "get",
 				route: "/api/all/:collectionId/:documentId",
-				handler: resolve(runtimePath, "server/api/all-collection-document.get"),
+				handler: resolve(runtimePath, "server/api/all-collection-document"),
 			});
 		}
 
@@ -154,12 +154,12 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 			addServerHandler({
 				method: "get",
 				route: "/api/instance/all/:collectionId",
-				handler: resolve(runtimePath, "server/api/all-collection.get"),
+				handler: resolve(runtimePath, "server/api/all-collection"),
 			});
 			addServerHandler({
 				method: "get",
 				route: "/api/instance/all/:collectionId/:documentId",
-				handler: resolve(runtimePath, "server/api/all-collection-document.get"),
+				handler: resolve(runtimePath, "server/api/all-collection-document"),
 			});
 		}
 	},

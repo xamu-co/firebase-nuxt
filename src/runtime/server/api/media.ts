@@ -9,6 +9,8 @@ import {
 	isError,
 	sendError,
 	setHeaders,
+	setResponseHeaders,
+	setResponseStatus,
 } from "h3";
 
 import { storageBucket } from "../utils/environment";
@@ -79,6 +81,9 @@ const cachedBufferHandler = defineCachedFunction(
 
 				// Return actual file
 				if (exists) {
+					// Bypass body for HEAD requests
+					if (event.method?.match(/^(HEAD)$/i)) return { headers };
+
 					const [buffer] = await file.download();
 
 					return { buffer, headers };
@@ -123,7 +128,9 @@ const cachedBufferHandler = defineCachedFunction(
 			const [baseAndExtension] = path.split("?"); // Ignore query params
 
 			// Compact hash
-			return createHash("sha256").update(baseAndExtension).digest("hex");
+			const hash = createHash("sha256").update(baseAndExtension).digest("hex");
+
+			return `${event.method}:${hash}`;
 		},
 	}
 );
@@ -136,12 +143,29 @@ const cachedBufferHandler = defineCachedFunction(
  */
 export default defineEventHandler(async (event) => {
 	const path = getRouterParam(event, "path") || "";
+	const Allow = "GET,HEAD,OPTIONS";
 
 	try {
+		// Override CORS headers
+		setResponseHeaders(event, { Allow, "Access-Control-Allow-Methods": Allow });
+
+		// Only GET, HEAD & OPTIONS are allowed
+		if (!event.method?.match(/^(GET|HEAD|OPTIONS)$/i)) {
+			throw createError({ statusCode: 405, statusMessage: "Unsupported method" });
+		} else if (event.method?.match(/^(OPTIONS)$/i)) {
+			return setResponseStatus(event, 204, "No Content");
+		}
+
 		const { buffer, headers, error } = await cachedBufferHandler(event, path);
 
 		if (headers) setHeaders(event, headers);
+
 		if (error || !buffer) {
+			// Bypass body for HEAD requests
+			if (!error && event.method?.match(/^(HEAD)$/i)) {
+				return setResponseStatus(event, 200, "OK");
+			}
+
 			// Set fallback error
 			const err =
 				error ||

@@ -1,4 +1,4 @@
-import { type H3Event, type EventHandlerRequest, getRequestURL, createError, getQuery } from "h3";
+import { type H3Event, type EventHandlerRequest, getRequestURL, getQuery } from "h3";
 import {
 	type DocumentData,
 	DocumentReference,
@@ -48,20 +48,14 @@ export function debugFirebaseServer<T extends EventHandlerRequest>(
 export function resolveServerDocumentRefs<
 	T extends PseudoNode,
 	R extends FromData<T> = FromData<T>,
->(event: H3Event, snapshot?: DocumentSnapshot<T, R>, collection = "documents", withAuth?: boolean) {
-	if (!snapshot?.exists) {
-		let statusMessage = `No "${collection}" matched`;
+>(event: H3Event, snapshot?: DocumentSnapshot<T, R>, withAuth?: boolean) {
+	if (snapshot?.exists) {
+		const params = getQuery(event);
+		const level = Array.isArray(params.level) || !params.level ? 0 : Number(params.level);
+		const omit = Array.isArray(params.omit) ? params.omit : [params.omit];
 
-		if (snapshot?.ref.path) statusMessage = `${statusMessage} for ${snapshot.ref.path}`;
-
-		throw createError({ statusCode: 404, statusMessage });
+		return resolveServerRefs<T, R>(snapshot, { level, omit }, withAuth);
 	}
-
-	const params = getQuery(event);
-	const level = Array.isArray(params.level) || !params.level ? 0 : Number(params.level);
-	const omit = Array.isArray(params.omit) ? params.omit : [params.omit];
-
-	return resolveServerRefs<T, R>(snapshot, { level, omit }, withAuth);
 }
 
 /**

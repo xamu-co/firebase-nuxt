@@ -1,5 +1,12 @@
 import { FieldPath, type Query } from "firebase-admin/firestore";
-import { createError, getQuery, getRouterParam, isError, setResponseStatus } from "h3";
+import {
+	createError,
+	getQuery,
+	getRouterParam,
+	isError,
+	setResponseHeaders,
+	setResponseStatus,
+} from "h3";
 
 import { defineConditionallyCachedEventHandler } from "../utils/cache";
 import { getBoolean } from "../utils/guards";
@@ -26,8 +33,19 @@ export default defineConditionallyCachedEventHandler(
 		const fieldDocument = FieldPath.documentId();
 		const { firebaseFirestore } = getServerFirebase("api:all:[collectionId]");
 		const { currentInstanceRef } = event.context;
+		const Allow = "GET,HEAD,OPTIONS";
 
 		try {
+			// Override CORS headers
+			setResponseHeaders(event, { Allow, "Access-Control-Allow-Methods": Allow });
+
+			// Only GET, HEAD & OPTIONS are allowed
+			if (!event.method?.match(/^(GET|HEAD|OPTIONS)$/i)) {
+				throw createError({ statusCode: 405, statusMessage: "Unsupported method" });
+			} else if (event.method?.match(/^(OPTIONS)$/i)) {
+				return setResponseStatus(event, 204, "No Content");
+			}
+
 			const params = getQuery(event);
 			const page = getBoolean(params.page);
 			const collectionId = getRouterParam(event, "collectionId");
@@ -59,6 +77,10 @@ export default defineConditionallyCachedEventHandler(
 					statusMessage: `Can't list "${collectionId}"`,
 				});
 			}
+
+			// Bypass body for HEAD requests
+			// Since we always return an array or an object, we can just return 200
+			if (event.method?.match(/^(HEAD)$/i)) return setResponseStatus(event, 200, "OK");
 
 			// filtered query cannot be mixed with any other query type
 			if (params.include) {
