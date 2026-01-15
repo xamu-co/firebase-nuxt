@@ -1,5 +1,22 @@
 Firebase nuxt
 
+# [2.0.0-next.2](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.1...v2.0.0-next.2) (2026-01-15)
+
+
+### Bug Fixes
+
+* prevent no content on head responses ([a16a768](https://github.com/xamu-co/firebase-nuxt/commit/a16a7682d3fb322bafda64177f5d57541069beac))
+
+
+### Features
+
+* accept head & options request ([2822f2f](https://github.com/xamu-co/firebase-nuxt/commit/2822f2ffeb27cc5b6034cb4fe131ae20ae0bde99))
+
+
+### BREAKING CHANGES
+
+* less args at resolveServerDocumentRefs
+
 # [2.0.0-next.1](https://github.com/xamu-co/firebase-nuxt/compare/v1.2.0-next.2...v2.0.0-next.1) (2026-01-13)
 
 
