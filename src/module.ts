@@ -1,3 +1,4 @@
+import type { NitroEventHandler } from "nitropack";
 import {
 	defineNuxtModule,
 	addPlugin,
@@ -125,43 +126,48 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 			handler: resolve(runtimePath, "server/middleware/1.context"),
 		});
 
-		// Register server handlers, media
-		// @see https://github.com/nuxt/nuxt/issues/34044#issuecomment-3735519341
-		if (moduleOptions.media) {
-			addServerHandler({
-				method: "get",
-				route: "/api/media/**:path",
-				handler: resolve(runtimePath, "server/api/media"),
-			});
-		}
+		// Register server handlers
+		const methods: NitroEventHandler["method"][] = ["get", "head", "options"];
 
-		// Register server handlers, global
-		if (moduleOptions.readCollection) {
-			addServerHandler({
-				method: "get",
-				route: "/api/all/:collectionId",
-				handler: resolve(runtimePath, "server/api/all-collection"),
-			});
-			addServerHandler({
-				method: "get",
-				route: "/api/all/:collectionId/:documentId",
-				handler: resolve(runtimePath, "server/api/all-collection-document"),
-			});
-		}
+		methods.forEach((method) => {
+			// Register server handlers, media
+			// @see https://github.com/nuxt/nuxt/issues/34044#issuecomment-3735519341
+			if (moduleOptions.media) {
+				addServerHandler({
+					method,
+					route: "/api/media/**:path",
+					handler: resolve(runtimePath, "server/api/media"),
+				});
+			}
 
-		// Register server handlers, instance
-		if (moduleOptions.readInstanceCollection) {
-			addServerHandler({
-				method: "get",
-				route: "/api/instance/all/:collectionId",
-				handler: resolve(runtimePath, "server/api/all-collection"),
-			});
-			addServerHandler({
-				method: "get",
-				route: "/api/instance/all/:collectionId/:documentId",
-				handler: resolve(runtimePath, "server/api/all-collection-document"),
-			});
-		}
+			// Register server handlers, global
+			if (moduleOptions.readCollection) {
+				addServerHandler({
+					method,
+					route: "/api/all/:collectionId",
+					handler: resolve(runtimePath, "server/api/all-collection"),
+				});
+				addServerHandler({
+					method,
+					route: "/api/all/:collectionId/:documentId",
+					handler: resolve(runtimePath, "server/api/all-collection-document"),
+				});
+			}
+
+			// Register server handlers, instance
+			if (moduleOptions.readInstanceCollection) {
+				addServerHandler({
+					method,
+					route: "/api/instance/all/:collectionId",
+					handler: resolve(runtimePath, "server/api/all-collection"),
+				});
+				addServerHandler({
+					method,
+					route: "/api/instance/all/:collectionId/:documentId",
+					handler: resolve(runtimePath, "server/api/all-collection-document"),
+				});
+			}
+		});
 	},
 	moduleDependencies() {
 		const { resolve } = createResolver(import.meta.url);

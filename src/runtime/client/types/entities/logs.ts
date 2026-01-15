@@ -1,4 +1,5 @@
 import type { DocumentReference } from "firebase/firestore";
+
 import type { LogData, OffenderData } from "../../../functions/types";
 import type { FromData } from "./base";
 import type { GetSharedRef } from "./user";

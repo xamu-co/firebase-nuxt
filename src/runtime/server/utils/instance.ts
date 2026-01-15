@@ -57,10 +57,9 @@ export const getInstance = defineCachedFunction(
 		 * Use ToMillis for consistency
 		 */
 		const millis = snapshot.data()?.createdAt?.toMillis();
-		const instance: Instance =
-			(await resolveServerDocumentRefs(event, snapshot, "instances", false)) || {};
+		const instance = await resolveServerDocumentRefs(event, snapshot, false);
 
-		if (!instance.id || !millis) {
+		if (!instance?.id || !millis) {
 			throw createError({
 				statusCode: 502,
 				statusMessage: `Invalid app instance for ${host}`,
@@ -109,7 +108,7 @@ export const getRootInstance = defineCachedFunction(
 			.doc(rootInstanceId)
 			.get();
 
-		return resolveServerDocumentRefs(event, snapshot, "instances", false) || {};
+		return resolveServerDocumentRefs(event, snapshot, false) || {};
 	},
 	{
 		name: "getRootInstance",

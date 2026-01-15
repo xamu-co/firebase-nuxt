@@ -25,24 +25,7 @@ export default defineEventHandler(async (event) => {
 	const corsHeaders = ["Origin", "Referer", "User-Agent"].join(", ");
 
 	// Only provide context for firestore endpoints
-	if (!event.path.startsWith("/api")) {
-		// Set CORS headers for non-firestore endpoints
-		setResponseHeaders(event, {
-			"Access-Control-Allow-Methods": "GET,HEAD",
-			Vary: "Host, Origin",
-		});
-
-		if (event.method === "OPTIONS") {
-			// Set CORS preflight headers
-			setResponseHeaders(event, {
-				"Access-Control-Allow-Headers": corsHeaders,
-				"Access-Control-Expose-Headers": corsHeaders,
-			});
-			setResponseStatus(event, 204, "No Content");
-		}
-
-		return;
-	}
+	if (!event.path.startsWith("/api")) return;
 
 	/**
 	 * Forwarded host is prefered
@@ -97,13 +80,12 @@ export default defineEventHandler(async (event) => {
 			Vary: "Host, Origin",
 		});
 
-		if (event.method === "OPTIONS") {
+		if (event.method?.toUpperCase() === "OPTIONS") {
 			// Set CORS preflight headers
 			setResponseHeaders(event, {
 				"Access-Control-Allow-Headers": corsHeadersAccept,
 				"Access-Control-Expose-Headers": corsHeadersExpose,
 			});
-			setResponseStatus(event, 204, "No Content");
 		}
 
 		/**

@@ -8,6 +8,7 @@ import {
 	H3Event,
 	isError,
 	sendError,
+	sendNoContent,
 	setHeaders,
 	setResponseHeaders,
 	setResponseStatus,
@@ -82,7 +83,7 @@ const cachedBufferHandler = defineCachedFunction(
 				// Return actual file
 				if (exists) {
 					// Bypass body for HEAD requests
-					if (event.method?.match(/^(HEAD)$/i)) return { headers };
+					if (event.method?.toUpperCase() === "HEAD") return { headers };
 
 					const [buffer] = await file.download();
 
@@ -130,7 +131,7 @@ const cachedBufferHandler = defineCachedFunction(
 			// Compact hash
 			const hash = createHash("sha256").update(baseAndExtension).digest("hex");
 
-			return `${event.method}:${hash}`;
+			return `${hash}:${event.method}`;
 		},
 	}
 );
@@ -143,27 +144,31 @@ const cachedBufferHandler = defineCachedFunction(
  */
 export default defineEventHandler(async (event) => {
 	const path = getRouterParam(event, "path") || "";
-	const Allow = "GET,HEAD,OPTIONS";
+	const Allow = "GET,HEAD";
 
 	try {
 		// Override CORS headers
 		setResponseHeaders(event, { Allow, "Access-Control-Allow-Methods": Allow });
 
 		// Only GET, HEAD & OPTIONS are allowed
-		if (!event.method?.match(/^(GET|HEAD|OPTIONS)$/i)) {
+		if (!["GET", "HEAD", "OPTIONS"].includes(event.method?.toUpperCase())) {
 			throw createError({ statusCode: 405, statusMessage: "Unsupported method" });
-		} else if (event.method?.match(/^(OPTIONS)$/i)) {
-			return setResponseStatus(event, 204, "No Content");
+		} else if (event.method?.toUpperCase() === "OPTIONS") {
+			// Options only needs allow headers
+			return sendNoContent(event);
 		}
 
-		const { buffer, headers, error } = await cachedBufferHandler(event, path);
+		const { buffer, headers = {}, error } = await cachedBufferHandler(event, path);
 
-		if (headers) setHeaders(event, headers);
+		setHeaders(event, headers);
 
 		if (error || !buffer) {
 			// Bypass body for HEAD requests
-			if (!error && event.method?.match(/^(HEAD)$/i)) {
-				return setResponseStatus(event, 200, "OK");
+			if (!error && event.method?.toUpperCase() === "HEAD") {
+				setResponseStatus(event, 200);
+
+				// Prevent no content status
+				return "Ok";
 			}
 
 			// Set fallback error
