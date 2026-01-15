@@ -21,6 +21,7 @@ import type {
 	SharedDocument,
 	FirebaseDocument,
 	iSnapshotConfig,
+	FromData,
 } from "../../client/types";
 import { getDocumentId } from "../../client/utils/resolver";
 import { TimedPromise } from "../../server/utils/guards";
@@ -33,8 +34,8 @@ interface iUseDocumentOptions extends iSnapshotConfig {
 
 /** Creates document with the given values */
 export async function useDocumentCreate<
-	Vgr extends GetRef<V>,
-	V extends FirebaseDocument = FirebaseDocument,
+	Vgr extends GetRef<SharedDocument>,
+	V extends FromData<Vgr> = FromData<Vgr>,
 >(
 	collectionPath: string,
 	partialRef: Vgr,
@@ -150,8 +151,8 @@ export async function useDocumentCreate<
  * @returns A boolean promise.
  */
 export async function useDocumentUpdate<
-	Vgr extends GetRef<V>,
-	V extends FirebaseDocument = FirebaseDocument,
+	Vgr extends GetRef<SharedDocument>,
+	V extends FromData<Vgr> = FromData<Vgr>,
 >(
 	node: SharedDocument,
 	middleRef: Partial<Vgr> = {},
@@ -255,8 +256,8 @@ export async function useDocumentUpdate<
 
 /** Clones given document */
 export async function useDocumentClone<
-	Vgr extends GetRef<V>,
-	V extends FirebaseDocument = FirebaseDocument,
+	Vgr extends GetRef<SharedDocument>,
+	V extends FromData<Vgr> = FromData<Vgr>,
 >(
 	node: SharedDocument,
 	middleRef: Partial<Vgr> = {},

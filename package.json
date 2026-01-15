@@ -1,6 +1,7 @@
 {
   "name": "@open-xamu-co/firebase-nuxt",
   "version": "2.0.0-next.1",
+  "stableVersion": "1.1.0",
   "description": "Nuxt 3 module for the xamu project",
   "author": "@xamu-co",
   "type": "module",
@@ -88,6 +89,7 @@
     "@open-xamu-co/ui-common-helpers": "^4.0.0-next.2",
     "@open-xamu-co/ui-nuxt": "^4.0.0-next.6",
     "@pinia/nuxt": "^0.11.0",
+    "accept-language-parser": "^1.5.0",
     "firebase": "^11.0.2",
     "firebase-admin": "^13.6.0",
     "firebase-functions": "^7.0.3",
@@ -160,6 +162,5 @@
   },
   "browserslist": [
     "defaults"
-  ],
-  "stableVersion": "1.1.0"
+  ]
 }

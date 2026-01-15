@@ -12,6 +12,8 @@ interface CachedEventHandlerOptions<T extends EventHandlerRequest = EventHandler
 	getKey?: (...args: [CachedH3Event<T>]) => string | Promise<string>;
 	/** Partition cache by instance */
 	instanceOnly?: boolean;
+	/** Partition cache by method */
+	methodOnly?: boolean;
 }
 
 /**
@@ -30,21 +32,20 @@ export const defineConditionallyCachedEventHandler = <
 	D extends EventHandlerResponse = EventHandlerResponse,
 >(
 	handler: CachedEventHandler<T, D>,
-	{ getKey, instanceOnly = true }: CachedEventHandlerOptions<T> = {}
+	{ getKey, instanceOnly = true, methodOnly = true }: CachedEventHandlerOptions<T> = {}
 ): CachedEventHandler<T, D> => {
 	const cachedHandler = defineCachedEventHandler(handler, {
 		maxAge: 30, // 30 seconds
-		getKey: instanceOnly
-			? (event: CachedH3Event<T>) => {
-					// Prefix with instance host if available
-					const { currentInstanceHost } = event.context;
-					const key = getKey?.(event) || event.path;
+		getKey(event: CachedH3Event<T>) {
+			// Prefix with instance host if available
+			const { currentInstanceHost } = event.context;
+			let key = getKey?.(event) || event.path;
 
-					if (currentInstanceHost) return `${currentInstanceHost}:${key}`;
+			if (instanceOnly && currentInstanceHost) key += `:${currentInstanceHost}`;
+			if (methodOnly) key += `:${event.method}`;
 
-					return key;
-				}
-			: getKey,
+			return key;
+		},
 	});
 
 	return defineEventHandler<T>(async (event: CachedH3Event<T>) => {

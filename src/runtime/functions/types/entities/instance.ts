@@ -34,6 +34,13 @@ export interface RootData extends InstanceData {
 	poweredBy?: string;
 }
 
+export interface InstanceDataConfig extends FirebaseData {
+	/**
+	 * When tenants are enabled, domains are required
+	 */
+	domains?: string[];
+}
+
 /**
  * App instance
  *
@@ -51,13 +58,7 @@ export interface InstanceData extends SharedData {
 	 * @automated
 	 */
 	url?: string;
-	config?: {
-		[key: string]: any;
-		/**
-		 * When tenants are enabled, domains are required
-		 */
-		domains?: string[];
-	};
+	config?: InstanceDataConfig;
 }
 
 /**

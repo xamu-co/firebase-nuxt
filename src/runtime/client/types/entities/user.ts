@@ -11,8 +11,8 @@ import type { Instance, SharedDocument } from "./instance";
  * Removed properties are not required or are part of automation
  */
 export type GetSharedRef<T extends SharedDocument, O extends keyof T = never> = {
-	[K in keyof FromData<Omit<T, "id" | O>> as K extends `${string}At` ? never : K]: FromData<
-		Omit<T, "id" | O>
+	[K in keyof FromData<Omit<T, O>> as K extends `${string}At` ? never : K]: FromData<
+		Omit<T, O>
 	>[K];
 } & {
 	createdByRef?: DocumentReference | FieldValue;
