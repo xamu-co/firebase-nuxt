@@ -1,5 +1,12 @@
 Firebase nuxt
 
+# [2.0.0-next.3](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.2...v2.0.0-next.3) (2026-01-16)
+
+
+### Bug Fixes
+
+* bump dependencies for h3 vurnerability ([30f8565](https://github.com/xamu-co/firebase-nuxt/commit/30f85650c08814838bf967a4f524d32f245f1f45))
+
 # [2.0.0-next.2](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.1...v2.0.0-next.2) (2026-01-15)
 
 
