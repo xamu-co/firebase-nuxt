@@ -42,12 +42,15 @@ export async function useDocumentCreate<
 	createdCallback?: (ref: DocumentReference<Vgr, V>) => Promise<void> | void,
 	{ omitLoggings, ...config }: iUseDocumentOptions = { omitLoggings: false, level: 0 }
 ): Promise<iNodeFnResponseStream<V>> {
+	const SESSION = useSessionStore();
+	const INSTANCE = useInstanceStore();
 	const { $clientFirestore, $resolveClientRefs } = useNuxtApp();
 
 	if (!collectionPath || !$clientFirestore) throw new Error("Collection path is required");
 
-	const SESSION = useSessionStore();
-	const INSTANCE = useInstanceStore();
+	// Instance is also required
+	if (!INSTANCE) throw new Error("Missing instance");
+
 	const collRef = <CollectionReference<Vgr, V>>collection($clientFirestore, collectionPath); // get collection ref
 
 	// Conditionally inject instance information
@@ -56,6 +59,7 @@ export async function useDocumentCreate<
 
 		(partialRef as Partial<UserRef>).instancesRefs = arrayUnion(instanceRef);
 	}
+
 	// Conditionally inject member information
 	if (SESSION.token) {
 		const memberId = getDocumentId(SESSION.path);
@@ -158,12 +162,15 @@ export async function useDocumentUpdate<
 	middleRef: Partial<Vgr> = {},
 	{ omitLoggings, ...config }: iUseDocumentOptions = { omitLoggings: false, level: 0 }
 ): Promise<iNodeFnResponseStream<V>> {
+	const SESSION = useSessionStore();
+	const INSTANCE = useInstanceStore();
 	const { $clientFirestore, $resolveClientRefs } = useNuxtApp();
 
 	if (!node.id || !$clientFirestore) throw new Error("Document id is required");
 
-	const SESSION = useSessionStore();
-	const INSTANCE = useInstanceStore();
+	// Instance is also required
+	if (!INSTANCE) throw new Error("Missing instance");
+
 	const docRef = <DocumentReference<Vgr, V>>doc($clientFirestore, node.id || ""); // get node ref
 	const partialRef = <Vgr>middleRef;
 	const lastUpdatedAt = node.updatedAt ? new Date(node.updatedAt).getTime() : 0;
@@ -263,12 +270,15 @@ export async function useDocumentClone<
 	middleRef: Partial<Vgr> = {},
 	{ omitLoggings, ...config }: iUseDocumentOptions = { omitLoggings: false, level: 0 }
 ): Promise<iNodeFnResponseStream<V>> {
+	const SESSION = useSessionStore();
+	const INSTANCE = useInstanceStore();
 	const { $clientFirestore, $resolveClientRefs } = useNuxtApp();
 
 	if (!node.id || !$clientFirestore) throw new Error("Document id is required");
 
-	const SESSION = useSessionStore();
-	const INSTANCE = useInstanceStore();
+	// Instance is also required
+	if (!INSTANCE) throw new Error("Missing instance");
+
 	const docRef = <DocumentReference<Vgr, V>>doc($clientFirestore, node.id);
 	const partialRef = <Vgr>middleRef;
 	const source = (await getDoc(docRef)).data();
@@ -362,12 +372,15 @@ export async function useDocumentDelete<T extends FirebaseDocument = FirebaseDoc
 	node: SharedDocument,
 	{ omitLoggings }: iUseDocumentOptions = { omitLoggings: false, level: 0 }
 ): Promise<iNodeFnResponseStream<T>> {
+	const SESSION = useSessionStore();
+	const INSTANCE = useInstanceStore();
 	const { $clientFirestore } = useNuxtApp();
 
 	if (!node.id || !$clientFirestore) throw new Error("Document id is required");
 
-	const SESSION = useSessionStore();
-	const INSTANCE = useInstanceStore();
+	// Instance is also required
+	if (!INSTANCE) throw new Error("Missing instance");
+
 	const docRef = doc($clientFirestore, node.id);
 	const memberId = getDocumentId(SESSION.path);
 	const memberPath = `${INSTANCE.id}/members/${memberId}`;
