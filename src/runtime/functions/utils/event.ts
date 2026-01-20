@@ -132,8 +132,14 @@ export function onUpdated<T extends SharedData>(
 
 		if (!newDoc || !oldDoc) return null;
 
-		const { updatedAt: oldUpdatedAt, updatedByRef, deletedByRef, lock } = newDoc.data();
-		const { updatedAt: newUpdatedAt } = oldDoc.data();
+		const {
+			updatedAt: oldUpdatedAt,
+			createdAt: newCreatedAt,
+			updatedByRef,
+			deletedByRef,
+			lock,
+		} = newDoc.data();
+		const { updatedAt: newUpdatedAt, createdAt: oldCreatedAt = newCreatedAt } = oldDoc.data();
 		/**
 		 * Prefer parent instance for logging
 		 *
@@ -153,7 +159,11 @@ export function onUpdated<T extends SharedData>(
 		// Additional tasks
 		const callbackData = await callback?.(newDoc, oldDoc, { updatedAt, logger });
 
-		return newDoc.ref.set({ ...defaults, ...callbackData, updatedAt }, { merge: true });
+		// Update document, preserve createdAt
+		return newDoc.ref.set(
+			{ ...defaults, ...callbackData, updatedAt, createdAt: oldCreatedAt },
+			{ merge: true }
+		);
 	});
 }
 /**
@@ -163,7 +173,7 @@ export function onUpdated<T extends SharedData>(
  * @param callback callback fn
  * @returns firebase function
  */
-export function onDelete<T extends SharedData>(
+export function onDeleted<T extends SharedData>(
 	collectionPath: string,
 	callback: (
 		deletedDoc: QueryDocumentSnapshot<T>,

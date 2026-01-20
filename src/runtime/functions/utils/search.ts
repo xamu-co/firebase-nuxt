@@ -59,7 +59,10 @@ export function soundexEs(phrase: string): string {
 /**
  * Generate indexes to be used as tokens in a fuzzy search
  */
-export function getSearchIndexes(phrase: string): string[] {
+export function getSearchIndexes(
+	phrase: string,
+	soundexAlgorithm: (phrase: string) => string = soundexEs
+): string[] {
 	const words = getWords(phrase);
 	const indexes = new Set<string>();
 
@@ -73,7 +76,7 @@ export function getSearchIndexes(phrase: string): string[] {
 		// Iterate over each combination of words
 		[forwardWords, backwardWords].forEach((currentWords) => {
 			// Generate the search index for each combination of words
-			const perPhraseIndex = soundexEs(currentWords.join(" "));
+			const perPhraseIndex = soundexAlgorithm(currentWords.join(" "));
 
 			// Generate the search index for each word
 			const perWordIndex = currentWords
@@ -81,15 +84,15 @@ export function getSearchIndexes(phrase: string): string[] {
 				.map((word) => {
 					// Add additional indexes to the set for long words
 					if (word.length >= 7) {
-						const threeIndex = soundexEs(word.slice(0, 3));
-						const fiveIndex = soundexEs(word.slice(0, 5));
+						const threeIndex = soundexAlgorithm(word.slice(0, 3));
+						const fiveIndex = soundexAlgorithm(word.slice(0, 5));
 
 						// Add additional indexes to the set
 						indexes.add(threeIndex).add(fiveIndex);
 					}
 
 					// Generate the search index for the current word
-					return soundexEs(word);
+					return soundexAlgorithm(word);
 				})
 				// Convert the array of indexes into a string
 				.join(" ");

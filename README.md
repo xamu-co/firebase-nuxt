@@ -1,6 +1,6 @@
 # Xamu nuxt firebase module
 
-Powered by Nuxt.js
+Powered by [Nuxt.js](https://nuxt.com) & [Xamu UI](https://github.com/xamu-co/ui)
 
 ## Prerequisites
 
