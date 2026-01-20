@@ -1,5 +1,24 @@
 Firebase nuxt
 
+# [2.0.0-next.4](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.3...v2.0.0-next.4) (2026-01-20)
+
+
+### Bug Fixes
+
+* crash firestore method if missing instance ([4d29aec](https://github.com/xamu-co/firebase-nuxt/commit/4d29aece4c13e80070e97aa63ee8d8609755ef4b))
+* preserve creation date ([7a3c2d2](https://github.com/xamu-co/firebase-nuxt/commit/7a3c2d21a3ef82cc6d736f918d30f3086c4f6fae))
+* soundex algorithm as param ([2fceb8d](https://github.com/xamu-co/firebase-nuxt/commit/2fceb8d3097e92dee91baae642a0c88a3c3e061a))
+
+
+### Features
+
+* bump for code editor ([838f5b3](https://github.com/xamu-co/firebase-nuxt/commit/838f5b327c3dd4681cb3d68200ec4aa1be9a6afe))
+
+
+### BREAKING CHANGES
+
+* onDelete >>> onDeleted
+
 # [2.0.0-next.3](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.2...v2.0.0-next.3) (2026-01-16)
 
 

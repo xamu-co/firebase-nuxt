@@ -1,6 +1,6 @@
 {
   "name": "@open-xamu-co/firebase-nuxt",
-  "version": "2.0.0-next.3",
+  "version": "2.0.0-next.4",
   "stableVersion": "1.1.0",
   "description": "Nuxt 3 module for the xamu project",
   "author": "@xamu-co",
