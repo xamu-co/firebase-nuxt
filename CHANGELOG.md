@@ -1,5 +1,12 @@
 Firebase nuxt
 
+# [2.0.0-next.5](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.4...v2.0.0-next.5) (2026-01-20)
+
+
+### Bug Fixes
+
+* bump for mapNodes priority ([08df299](https://github.com/xamu-co/firebase-nuxt/commit/08df29970297b82830253dfdd1920a1e9afd8f13))
+
 # [2.0.0-next.4](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.3...v2.0.0-next.4) (2026-01-20)
 
 
