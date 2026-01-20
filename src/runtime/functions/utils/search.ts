@@ -58,13 +58,38 @@ export function soundexEs(phrase: string): string {
 
 /**
  * Generate indexes to be used as tokens in a fuzzy search
+ *
+ * Indexes allow to search for a phrase in a fuzzy way
+ *
+ * @param phrase phrase to generate indexes for
+ * @param soundexAlgorithm soundex algorithm to use
+ * @returns array of indexes
  */
 export function getSearchIndexes(
 	phrase: string,
 	soundexAlgorithm: (phrase: string) => string = soundexEs
 ): string[] {
+	return getWeightedSearchIndexes(phrase, soundexAlgorithm).indexes;
+}
+
+/**
+ * Generate indexes to be used as tokens in a fuzzy search
+ *
+ * Indexes allow to search for a phrase in a fuzzy way
+ * Weights allow to sort results based on their relevance
+ *
+ * @param phrase phrase to generate indexes for
+ * @param soundexAlgorithm soundex algorithm to use
+ * @returns array of objects with index and weight
+ */
+export function getWeightedSearchIndexes(
+	phrase: string,
+	soundexAlgorithm: (phrase: string) => string = soundexEs
+): { indexes: string[]; indexesWeights: string[] } {
 	const words = getWords(phrase);
 	const indexes = new Set<string>();
+	/** Bigger the index less the relevance */
+	const weights = new Set<string>();
 
 	// Iterate over each word in the phrase
 	for (let i = 0; i < words.length; i++) {
@@ -75,33 +100,35 @@ export function getSearchIndexes(
 
 		// Iterate over each combination of words
 		[forwardWords, backwardWords].forEach((currentWords) => {
-			// Generate the search index for each combination of words
-			const perPhraseIndex = soundexAlgorithm(currentWords.join(" "));
-
-			// Generate the search index for each word
-			const perWordIndex = currentWords
-				// Iterate over each word
-				.map((word) => {
-					// Add additional indexes to the set for long words
-					if (word.length >= 7) {
-						const threeIndex = soundexAlgorithm(word.slice(0, 3));
-						const fiveIndex = soundexAlgorithm(word.slice(0, 5));
-
-						// Add additional indexes to the set
-						indexes.add(threeIndex).add(fiveIndex);
-					}
-
-					// Generate the search index for the current word
-					return soundexAlgorithm(word);
-				})
-				// Convert the array of indexes into a string
-				.join(" ");
-
 			// Add the search index for the current phrase and word to the set
-			indexes.add(perPhraseIndex).add(perWordIndex);
+			const phraseIndex = soundexAlgorithm(currentWords.join(" "));
+
+			indexes.add(phraseIndex);
+			weights.add(`0:${phraseIndex}`);
+
+			// Iterate over each word
+			currentWords.forEach((word) => {
+				// Add the search index for the current word to the set
+				const wordIndex = soundexAlgorithm(word);
+
+				indexes.add(wordIndex);
+				weights.add(`1:${wordIndex}`);
+
+				// Add additional indexes to the set for long words
+				if (word.length >= 7) {
+					const fiveIndex = soundexAlgorithm(word.slice(0, 5));
+					const threeIndex = soundexAlgorithm(word.slice(0, 3));
+
+					indexes.add(fiveIndex);
+					weights.add(`2:${fiveIndex}`);
+
+					indexes.add(threeIndex);
+					weights.add(`3:${threeIndex}`);
+				}
+			});
 		});
 	}
 
 	// Convert the set of indexes into an array
-	return Array.from(indexes);
+	return { indexes: Array.from(indexes), indexesWeights: Array.from(weights) };
 }
