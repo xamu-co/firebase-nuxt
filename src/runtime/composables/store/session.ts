@@ -63,7 +63,15 @@ export const useSessionStore = defineStore("session", () => {
 		setToken("", expiredToken);
 		user.value = undefined;
 	}
-	async function logout(clientAuth?: Auth): Promise<void> {
+	/**
+	 * Logout user
+	 * @param clientAuth Firebase auth client
+	 * @param unsetSessionFn Function to unset session data
+	 */
+	async function logout(
+		clientAuth?: Auth,
+		unsetSessionFn: (expiredToken?: boolean) => void = unsetSession
+	): Promise<void> {
 		if (import.meta.server) return;
 
 		const Swal = useSwal();
@@ -73,7 +81,7 @@ export const useSessionStore = defineStore("session", () => {
 		});
 
 		if (value) {
-			unsetSession();
+			unsetSessionFn();
 			await clientAuth?.signOut();
 			window.location.href = "/"; // rdr & reload page
 		}
