@@ -3,7 +3,6 @@ import { defineStore, skipHydrate } from "pinia";
 import { computed } from "vue";
 
 import type { InstanceMember, User } from "../../client/types";
-import { getDocumentId } from "../../client/utils/resolver";
 
 import { type CookieOptions } from "#app";
 import { useCookie, useRuntimeConfig, useSwal } from "#imports";
@@ -49,11 +48,7 @@ export const useSessionStore = defineStore("session", () => {
 	 * User firestore path
 	 * Path or empty string if no session is available
 	 */
-	const path = computed<string>(() => {
-		const id = user.value?.id;
-
-		return id ? `users/${getDocumentId(id)}` : "";
-	});
+	const path = computed<string>(() => user.value?.id || "");
 
 	// Actions
 	function setToken(newToken: string, newExpiredToken = false) {
