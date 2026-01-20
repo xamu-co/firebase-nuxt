@@ -1,5 +1,12 @@
 Firebase nuxt
 
+# [2.0.0-next.7](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.6...v2.0.0-next.7) (2026-01-20)
+
+
+### Bug Fixes
+
+* configurable default on session store actions ([117ce2e](https://github.com/xamu-co/firebase-nuxt/commit/117ce2e206563f4aa14eba7d427c9432cbfb7705))
+
 # [2.0.0-next.6](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.5...v2.0.0-next.6) (2026-01-20)
 
 
