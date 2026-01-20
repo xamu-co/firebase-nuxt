@@ -1,5 +1,12 @@
 Firebase nuxt
 
+# [2.0.0-next.6](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.5...v2.0.0-next.6) (2026-01-20)
+
+
+### Features
+
+* generate weighted search indexes ([36fdabc](https://github.com/xamu-co/firebase-nuxt/commit/36fdabc0ed5060813f2abf3aa748f023d9d3bb8f))
+
 # [2.0.0-next.5](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.4...v2.0.0-next.5) (2026-01-20)
 
 
