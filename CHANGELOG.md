@@ -1,5 +1,12 @@
 Firebase nuxt
 
+# [2.0.0-next.8](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.7...v2.0.0-next.8) (2026-01-21)
+
+
+### Features
+
+* bump for useMarkdown ([8c7cfd2](https://github.com/xamu-co/firebase-nuxt/commit/8c7cfd28e750a940aa8705ac35308312c4cdc41e))
+
 # [2.0.0-next.7](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.6...v2.0.0-next.7) (2026-01-20)
 
 
