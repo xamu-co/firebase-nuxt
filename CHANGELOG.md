@@ -1,5 +1,12 @@
 Firebase nuxt
 
+# [2.0.0-next.9](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.8...v2.0.0-next.9) (2026-01-21)
+
+
+### Bug Fixes
+
+* bump for editor fix ([46eec97](https://github.com/xamu-co/firebase-nuxt/commit/46eec975e7706188e883b375b314dfd020bf1968))
+
 # [2.0.0-next.8](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.7...v2.0.0-next.8) (2026-01-21)
 
 
