@@ -1,4 +1,9 @@
-import { type EventHandlerRequest, type EventHandlerResponse, defineEventHandler } from "h3";
+import {
+	type EventHandlerRequest,
+	type EventHandlerResponse,
+	defineEventHandler,
+	setResponseHeaders,
+} from "h3";
 import { defineCachedEventHandler } from "nitropack/runtime";
 
 import { debugNitro } from "../utils/environment";
@@ -51,6 +56,10 @@ export const defineConditionallyCachedEventHandler = <
 	return defineEventHandler<T>(async (event: CachedH3Event<T>) => {
 		// Bypass cache for admin purposes
 		if (sudo(event.context) || debugNitro.value()) return handler(event);
+
+		setResponseHeaders(event, {
+			"Cache-Control": "max-age=30, must-revalidate",
+		});
 
 		return cachedHandler(event);
 	});
