@@ -1,5 +1,18 @@
 Firebase nuxt
 
+# [2.0.0-next.10](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.9...v2.0.0-next.10) (2026-01-27)
+
+
+### Bug Fixes
+
+* define default cache header on helper handler ([48bcfab](https://github.com/xamu-co/firebase-nuxt/commit/48bcfab258e054179524824b67b89745a757eb60))
+* remove unsafe csurf module ([61c0487](https://github.com/xamu-co/firebase-nuxt/commit/61c0487a39ea7569e17468d64974dd8a1e8bd16c))
+
+
+### BREAKING CHANGES
+
+* removed csurf module and related helpers
+
 # [2.0.0-next.9](https://github.com/xamu-co/firebase-nuxt/compare/v2.0.0-next.8...v2.0.0-next.9) (2026-01-21)
 
 
