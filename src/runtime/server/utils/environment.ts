@@ -81,12 +81,6 @@ export const clientEmail = defineString("F_CLIENT_EMAIL");
 export const recaptchaEnterpriseKey = defineString("RECAPTCHA_ENTERPRISE_SITE_KEY");
 
 /**
- * CSurf encryption secret
- * Required for CSRF protected routes
- */
-export const csurfSecret = defineString("CSURF_SECRET");
-
-/**
  * Firebase client data
  */
 export const firebaseConfig = {

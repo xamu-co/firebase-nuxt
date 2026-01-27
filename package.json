@@ -94,7 +94,6 @@
     "firebase-admin": "^13.6.0",
     "firebase-functions": "^7.0.3",
     "lodash-es": "^4.17.21",
-    "nuxt-csurf": "^1.6.5",
     "pinia": "^3.0.2",
     "vue-router-better-scroller": "^0.0.0"
   },

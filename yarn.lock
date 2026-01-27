@@ -2942,7 +2942,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/kit@npm:3.20.2, @nuxt/kit@npm:^3.13.2, @nuxt/kit@npm:^3.15.4, @nuxt/kit@npm:^3.18.0, @nuxt/kit@npm:^3.20.2":
+"@nuxt/kit@npm:3.20.2, @nuxt/kit@npm:^3.15.4, @nuxt/kit@npm:^3.18.0, @nuxt/kit@npm:^3.20.2":
   version: 3.20.2
   resolution: "@nuxt/kit@npm:3.20.2"
   dependencies:
@@ -3405,7 +3405,6 @@ __metadata:
     lodash-es: "npm:^4.17.21"
     nuxi: "npm:^3.31.2"
     nuxt: "npm:^3.20.2"
-    nuxt-csurf: "npm:^1.6.5"
     pinia: "npm:^3.0.2"
     postcss: "npm:^8.5.6"
     postcss-cli: "npm:^11.0.1"
@@ -13845,17 +13844,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nuxt-csurf@npm:^1.6.5":
-  version: 1.6.5
-  resolution: "nuxt-csurf@npm:1.6.5"
-  dependencies:
-    "@nuxt/kit": "npm:^3.13.2"
-    defu: "npm:^6.1.4"
-    uncsrf: "npm:^1.2.0"
-  checksum: 10c0/104b2c5ff89af3615c6f6bd2c4adc05531f20271104b331d2acbd73ee9caf6ea8b066d98d470ffd829ee21850619bf5815c87559e8e8f1723f5eeaf6ca738822
-  languageName: node
-  linkType: hard
-
 "nuxt@npm:^3.20.2":
   version: 3.20.2
   resolution: "nuxt@npm:3.20.2"
@@ -19141,13 +19129,6 @@ postcss-precision@vis97c/postcss-precision:
   version: 0.1.3
   resolution: "uncrypto@npm:0.1.3"
   checksum: 10c0/74a29afefd76d5b77bedc983559ceb33f5bbc8dada84ff33755d1e3355da55a4e03a10e7ce717918c436b4dfafde1782e799ebaf2aadd775612b49f7b5b2998e
-  languageName: node
-  linkType: hard
-
-"uncsrf@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "uncsrf@npm:1.2.0"
-  checksum: 10c0/608a5fe8a37bd2e06aae3c1a969cdfa4e67d9ced384b0d4405b2eabe5f21ce0e7607f937b866797bf397e742d94f2239c5164d01ac2a2f0d5f1249370bcd4122
   languageName: node
   linkType: hard
 

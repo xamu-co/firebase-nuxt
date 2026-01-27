@@ -8,7 +8,7 @@ import { useRequestHeaders, useNuxtApp, useRuntimeConfig, useSessionStore } from
  * @param baseOptions
  * @returns
  */
-async function getQueryOptions<R extends NitroFetchRequest = NitroFetchRequest>(
+export async function getQueryOptions<R extends NitroFetchRequest = NitroFetchRequest>(
 	baseOptions?: NitroFetchOptions<R>
 ): Promise<NitroFetchOptions<R>> {
 	const SESSION = useSessionStore();
@@ -35,19 +35,6 @@ async function getQueryOptions<R extends NitroFetchRequest = NitroFetchRequest>(
 	}
 
 	return { credentials: "same-origin", ...options, query, headers };
-}
-
-/**
- * Fetch wrapper with csrf token
- */
-export async function useCsrfQuery<T, R extends NitroFetchRequest = NitroFetchRequest>(
-	url: Extract<R, string>,
-	baseOptions?: NitroFetchOptions<R>
-) {
-	const { $csrfFetch } = useNuxtApp();
-	const { responseType, ...options } = await getQueryOptions(baseOptions);
-
-	return $csrfFetch<T>(url, options);
 }
 
 /**

@@ -11,12 +11,7 @@ import {
 
 import type { FirebaseNuxtModuleOptions } from "./types";
 import { locale } from "./runtime/client/utils/locale";
-import {
-	debugNuxt,
-	publicRuntimeConfig,
-	port,
-	csurfSecret,
-} from "./runtime/server/utils/environment";
+import { debugNuxt, publicRuntimeConfig, port } from "./runtime/server/utils/environment";
 
 /**
  * Nuxt module for @open-xamu-co/firebase-nuxt
@@ -174,13 +169,6 @@ export default defineNuxtModule<FirebaseNuxtModuleOptions>({
 		const runtimePath = resolve("./runtime");
 
 		return {
-			"nuxt-csurf": {
-				version: ">=1.6.5",
-				defaults: {
-					addCsrfTokenToEventCtx: true, // Run server side
-					encryptSecret: csurfSecret.value() || undefined,
-				},
-			},
 			"@open-xamu-co/ui-nuxt": {
 				version: ">=4.0.0-next.4",
 				defaults: {
