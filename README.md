@@ -57,10 +57,6 @@ F_CLIENT_EMAIL=""
 # App check, site key, public
 RECAPTCHA_ENTERPRISE_SITE_KEY=
 
-# CSRF protection (32 bytes)
-# By default csurf uses `crypto.randomBytes(22).toString("base64")`
-CSURF_SECRET=
-
 # Project
 ORIGIN=
 COUNTRIES_API=
