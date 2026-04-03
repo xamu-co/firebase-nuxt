@@ -3376,7 +3376,7 @@ __metadata:
     "@open-xamu-co/ui-common-enums": "npm:^4.0.0-next.2"
     "@open-xamu-co/ui-common-helpers": "npm:^4.0.0-next.4"
     "@open-xamu-co/ui-common-types": "npm:^4.0.0-next.4"
-    "@open-xamu-co/ui-components-vue": "npm:^4.0.0-next.10"
+    "@open-xamu-co/ui-components-vue": "npm:^4.0.0-next.11"
     "@open-xamu-co/ui-nuxt": "npm:^4.0.0-next.8"
     "@open-xamu-co/ui-styles": "npm:^5.0.0-next.4"
     "@pinia/nuxt": "npm:^0.11.0"
@@ -3460,9 +3460,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@open-xamu-co/ui-components-vue@npm:^4.0.0-next.10":
-  version: 4.0.0-next.10
-  resolution: "@open-xamu-co/ui-components-vue@npm:4.0.0-next.10"
+"@open-xamu-co/ui-components-vue@npm:^4.0.0-next.11":
+  version: 4.0.0-next.11
+  resolution: "@open-xamu-co/ui-components-vue@npm:4.0.0-next.11"
   dependencies:
     "@codemirror/lang-markdown": "npm:^6.5.0"
     "@fortawesome/fontawesome-common-types": "npm:^6.4.0"
@@ -3490,7 +3490,7 @@ __metadata:
   peerDependenciesMeta:
     vue-router:
       optional: true
-  checksum: 10c0/a84840a2fb9cb924048a93a03d3dd892dc117b025ed5f77f6facda8e157e77daebe91fa7a2d152cdab6acbc0f6c70499ab9c53e93cf40487bc8b25957fc5451d
+  checksum: 10c0/fc47a0d8e47a767642c79350ed75a95e4779590019adf2ec8dfcaecbdffca5881b63f32bd1acdc73d4b63902e3254236511dec2a2fba7f4c9243d7ea672961be
   languageName: node
   linkType: hard
 
